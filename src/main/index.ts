@@ -2,6 +2,16 @@ import { app, shell, BrowserWindow, ipcMain } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
+import { geminiGenerate } from './services/gemini'
+
+async function handleGeminiGenerate(_event, opts: { contents: string }) {
+  try {
+    const translatedText = await geminiGenerate(opts.contents)
+    return translatedText?.trim()
+  } catch (error) {
+    return 'API 호출 중 오류가 발생했습니다.'
+  }
+}
 
 function createWindow(): void {
   // Create the browser window.
@@ -53,6 +63,8 @@ app.whenReady().then(() => {
   ipcMain.on('ping', () => console.log('pong'))
 
   createWindow()
+
+  ipcMain.handle('gemini:generate', handleGeminiGenerate)
 
   app.on('activate', function () {
     // On macOS it's common to re-create a window in the app when the
