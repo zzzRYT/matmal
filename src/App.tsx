@@ -1,47 +1,144 @@
 import { useState } from 'react';
-import reactLogo from './assets/react.svg';
-import viteLogo from '/electron-vite.animate.svg';
-import './App.css';
 
 function App() {
-  const [count, setCount] = useState(0);
+  const [inputText, setInputText] = useState('');
+  const [resultText, setResultText] = useState('');
+  const [showSettings, setShowSettings] = useState(false);
+  const [showHelp, setShowHelp] = useState(false);
 
   const handleGemini = async () => {
     try {
       console.log('call gemini...');
       const response = await window.api.generate({
-        contents: 'Electron.js가 뭐예요?',
+        contents: inputText || '안녕하세요',
       });
-      console.log(response);
+      setResultText(response ?? '응답이 없습니다.');
     } catch (error) {
       console.error(error);
+      setResultText('오류가 발생했습니다. 콘솔을 확인하세요.');
     }
   };
 
   return (
-    <>
-      <div>
-        <a href="https://electron-vite.github.io" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-      <button onClick={handleGemini}>버튼</button>
-    </>
+    <div className="w-full min-h-screen flex flex-col bg-gray-50">
+      <header className="flex items-center justify-between px-4 py-3 bg-gray-800 text-white">
+        <div className="text-lg font-semibold">Matmal</div>
+        <div>
+          <button
+            aria-label="열기"
+            className="p-2 rounded hover:bg-gray-700"
+            onClick={() => setShowSettings(true)}
+          >
+            <svg
+              className="w-6 h-6"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M4 6h16M4 12h16M4 18h16"
+              />
+            </svg>
+          </button>
+        </div>
+      </header>
+
+      <main className="flex-1 p-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <section className="bg-white rounded shadow p-4 flex flex-col">
+            <h2 className="text-lg font-medium mb-2">맞춤법 검사 입력</h2>
+            <textarea
+              className="flex-1 resize-none border rounded p-3 focus:outline-none focus:ring"
+              placeholder="여기에 검사할 텍스트를 입력하세요..."
+              value={inputText}
+              onChange={(e) => setInputText(e.target.value)}
+              rows={10}
+            />
+            <div className="mt-3 flex items-center gap-2">
+              <button
+                className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+                onClick={handleGemini}
+              >
+                검사하기
+              </button>
+              <button
+                className="px-3 py-2 bg-gray-200 rounded hover:bg-gray-300"
+                onClick={() => setInputText('')}
+              >
+                지우기
+              </button>
+            </div>
+          </section>
+
+          <section className="bg-white rounded shadow p-4 flex flex-col">
+            <h2 className="text-lg font-medium mb-2">결과</h2>
+            <div className="overflow-hidden p-3 border rounded">
+              {resultText ? (
+                <p className="whitespace-pre-wrap overflow-auto">
+                  {resultText}
+                </p>
+              ) : (
+                <p className="text-gray-500">결과가 여기에 표시됩니다.</p>
+              )}
+            </div>
+          </section>
+        </div>
+      </main>
+
+      <footer className="px-4 py-3 bg-white border-t flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          <button
+            className="text-sm text-gray-600 hover:underline"
+            onClick={() => setShowHelp(true)}
+          >
+            도움말
+          </button>
+        </div>
+      </footer>
+
+      {showSettings && (
+        <div className="fixed inset-0 bg-black/40 flex items-end md:items-center justify-center">
+          <div className="bg-white rounded-t md:rounded p-4 w-full md:w-1/3">
+            <div className="flex items-center justify-between">
+              <h3 className="text-lg font-medium">설정</h3>
+              <button onClick={() => setShowSettings(false)} className="p-1">
+                ✕
+              </button>
+            </div>
+            <div className="mt-3">
+              <p className="text-sm text-gray-600">
+                여기에 설정을 추가하세요. (예: API 키, 모델 옵션 등)
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {showHelp && (
+        <div className="fixed inset-0 bg-black/40 flex items-center justify-center">
+          <div className="bg-white rounded p-4 w-11/12 md:w-1/2">
+            <div className="flex items-center justify-between">
+              <h3 className="text-lg font-medium">도움말</h3>
+              <button onClick={() => setShowHelp(false)} className="p-1">
+                ✕
+              </button>
+            </div>
+            <div className="mt-3 text-sm text-gray-700">
+              <p>
+                왼쪽 텍스트를 입력하고 '검사하기'를 눌러 맞춤법 검사를 실행할 수
+                있습니다.
+              </p>
+              <p className="mt-2">
+                글꼴 크기를 조정하면 결과 영역의 글자 크기가 변경됩니다.
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
   );
 }
 
