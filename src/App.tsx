@@ -19,6 +19,18 @@ function App() {
     }
   };
 
+  const handleHanSpellChecker = async () => {
+    try {
+      console.log('call hanSpell...');
+      const response = await window.api.hanSpell({
+        sentence: inputText || '안녕하세요',
+      });
+      console.log(response);
+    } catch (error) {
+      setResultText('오류가 발생했습니다. 콘솔을 확인하세요.');
+    }
+  };
+
   return (
     <div className="w-full min-h-screen flex flex-col bg-gray-50">
       <header className="flex items-center justify-between px-4 py-3 bg-gray-800 text-white">
@@ -60,7 +72,7 @@ function App() {
             <div className="mt-3 flex items-center gap-2">
               <button
                 className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
-                onClick={handleGemini}
+                onClick={handleHanSpellChecker}
               >
                 검사하기
               </button>
@@ -130,9 +142,6 @@ function App() {
               <p>
                 왼쪽 텍스트를 입력하고 '검사하기'를 눌러 맞춤법 검사를 실행할 수
                 있습니다.
-              </p>
-              <p className="mt-2">
-                글꼴 크기를 조정하면 결과 영역의 글자 크기가 변경됩니다.
               </p>
             </div>
           </div>
