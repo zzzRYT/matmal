@@ -2,6 +2,7 @@ import { app, BrowserWindow, ipcMain } from 'electron';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 import { handleGeminiGenerate } from './controller/gemini';
+import { handleHanSpellCheck } from './controller/hanSpell';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -41,6 +42,7 @@ function createWindow() {
   });
 
   ipcMain.handle('generate', handleGeminiGenerate);
+  ipcMain.handle('hanSpell-check', handleHanSpellCheck);
 
   if (VITE_DEV_SERVER_URL) {
     win.loadURL(VITE_DEV_SERVER_URL);

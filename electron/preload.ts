@@ -4,11 +4,14 @@ declare global {
   interface Window {
     api: {
       generate: (opts: { contents: string }) => Promise<string>;
+      hanSpell: (opts: {
+        sentence: string;
+        weakOpt?: number;
+      }) => Promise<unknown>;
     };
   }
 }
 
-// --------- Expose some API to the Renderer process ---------
 contextBridge.exposeInMainWorld('ipcRenderer', {
   on(...args: Parameters<typeof ipcRenderer.on>) {
     const [channel, listener] = args;
@@ -28,12 +31,11 @@ contextBridge.exposeInMainWorld('ipcRenderer', {
     const [channel, ...omit] = args;
     return ipcRenderer.invoke(channel, ...omit);
   },
-
-  // You can expose other APTs you need here.
-  // ...
 });
 
 contextBridge.exposeInMainWorld('api', {
   generate: (opts: { contents: string }) =>
     ipcRenderer.invoke('generate', opts),
+  hanSpell: (opts: { sentence: string; weakOpt?: number }) =>
+    ipcRenderer.invoke('hanSpell-check', opts),
 });

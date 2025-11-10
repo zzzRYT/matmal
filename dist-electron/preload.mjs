@@ -20,9 +20,8 @@ electron.contextBridge.exposeInMainWorld("ipcRenderer", {
     const [channel, ...omit] = args;
     return electron.ipcRenderer.invoke(channel, ...omit);
   }
-  // You can expose other APTs you need here.
-  // ...
 });
 electron.contextBridge.exposeInMainWorld("api", {
-  generate: (opts) => electron.ipcRenderer.invoke("generate", opts)
+  generate: (opts) => electron.ipcRenderer.invoke("generate", opts),
+  hanSpell: (opts) => electron.ipcRenderer.invoke("hanSpell-check", opts)
 });
