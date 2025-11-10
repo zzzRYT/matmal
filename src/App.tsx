@@ -1,23 +1,28 @@
 import { useState } from 'react';
+import type { SpellCheckerApiResponse } from '../electron/services/schema';
+import SpellHelper from './components/SpellHelper';
 
 function App() {
   const [inputText, setInputText] = useState('');
-  const [resultText, setResultText] = useState('');
+  const [resultData, setResultData] = useState<SpellCheckerApiResponse | null>(
+    null
+  );
   const [showSettings, setShowSettings] = useState(false);
   const [showHelp, setShowHelp] = useState(false);
 
-  const handleGemini = async () => {
-    try {
-      console.log('call gemini...');
-      const response = await window.api.generate({
-        contents: inputText || '안녕하세요',
-      });
-      setResultText(response ?? '응답이 없습니다.');
-    } catch (error) {
-      console.error(error);
-      setResultText('오류가 발생했습니다. 콘솔을 확인하세요.');
-    }
-  };
+  // [TODO]: gemini를 사용한 맞춤법 검사 구현
+  // const handleGemini = async () => {
+  //   try {
+  //     console.log('call gemini...');
+  //     const response = await window.api.generate({
+  //       contents: inputText || '안녕하세요',
+  //     });
+  //     setResultText(response ?? '응답이 없습니다.');
+  //   } catch (error) {
+  //     console.error(error);
+  //     setResultText('오류가 발생했습니다. 콘솔을 확인하세요.');
+  //   }
+  // };
 
   const handleHanSpellChecker = async () => {
     try {
@@ -25,9 +30,9 @@ function App() {
       const response = await window.api.hanSpell({
         sentence: inputText || '안녕하세요',
       });
-      console.log(response);
+      setResultData(response);
     } catch (error) {
-      setResultText('오류가 발생했습니다. 콘솔을 확인하세요.');
+      console.log(error);
     }
   };
 
@@ -87,11 +92,12 @@ function App() {
 
           <section className="bg-white rounded shadow p-4 flex flex-col">
             <h2 className="text-lg font-medium mb-2">결과</h2>
-            <div className="overflow-hidden p-3 border rounded">
-              {resultText ? (
-                <p className="whitespace-pre-wrap overflow-auto">
-                  {resultText}
-                </p>
+            <div className="overflow-hidden p-3 border rounded space-y-3">
+              {resultData &&
+              resultData.PnuErrorWordList.PnuErrorWord.length > 0 ? (
+                resultData.PnuErrorWordList.PnuErrorWord.map((word, idx) => (
+                  <SpellHelper key={idx} wordList={word} />
+                ))
               ) : (
                 <p className="text-gray-500">결과가 여기에 표시됩니다.</p>
               )}
