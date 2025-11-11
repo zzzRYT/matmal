@@ -5,6 +5,10 @@ interface InsteadProps {
 }
 
 function Instead({ instead }: InsteadProps) {
+  if (!instead) {
+    return null;
+  }
+
   if (!Array.isArray(instead.CandWord)) {
     return (
       <span className="inline-block px-2 py-1 bg-yellow-100 text-sm rounded hover:bg-yellow-200">

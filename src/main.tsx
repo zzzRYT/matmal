@@ -3,14 +3,16 @@ import ReactDOM from 'react-dom/client';
 import App from './App.tsx';
 import './index.css';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import SpellChecker from './components/SpellChecker/index.tsx';
+import SpellCheckerPage from './page/spell-checker/index.tsx';
+import UserInputPage from './page/user-input/index.tsx';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<App />}>
-          <Route index element={<SpellChecker />} />
+          <Route path="" element={<UserInputPage />} />
+          <Route path="result" element={<SpellCheckerPage />} />
         </Route>
       </Routes>
     </BrowserRouter>

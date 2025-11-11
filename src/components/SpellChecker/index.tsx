@@ -1,67 +1,111 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import SpellHelper from './SpellHelper';
+import HighlightSpelling from './HighlightSpelling';
+type Highlight = { start: number; end: number; id: string; meta: unknown };
 
 import { SpellCheckerApiResponse } from '../../../electron/services/schema';
 
-function SpellChecker() {
-  const [inputText, setInputText] = useState('');
+interface SpellChecker {
+  inputText: string;
+}
+
+function SpellChecker({ inputText }: SpellChecker) {
   const [resultData, setResultData] = useState<SpellCheckerApiResponse | null>(
     null
   );
+  const [loading, setLoading] = useState(false);
 
-  const handleHanSpellChecker = async () => {
-    try {
-      console.log('call hanSpell...');
-      const response = await window.api.hanSpell({
-        sentence: inputText || '안녕하세요',
-      });
-      setResultData(response);
-    } catch (error) {
-      console.log(error);
+  useEffect(() => {
+    if (!inputText) {
+      setResultData(null);
+      return;
     }
-  };
+    let cancelled = false;
+    setLoading(true);
+    const t = setTimeout(async () => {
+      try {
+        const res = await window.api.hanSpell({ sentence: inputText });
+        if (!cancelled) setResultData(res as SpellCheckerApiResponse);
+      } catch (err) {
+        console.error('hanSpell error', err);
+        if (!cancelled) setResultData(null);
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
+    }, 300);
+    return () => {
+      cancelled = true;
+      clearTimeout(t);
+    };
+  }, [inputText]);
+
+  function computeHighlights(text: string) {
+    if (!resultData) return [] as Highlight[];
+    const raw = resultData.PnuErrorWordList?.PnuErrorWord;
+    const errors = Array.isArray(raw) ? raw : raw ? [raw] : [];
+    const highlights: Highlight[] = [];
+    const used = new Array(text.length).fill(false);
+    for (const err of errors) {
+      const token = err.OrgStr ?? '';
+      if (!token) continue;
+      let pos = text.indexOf(token);
+      while (pos !== -1) {
+        const overlap = used.slice(pos, pos + token.length).some(Boolean);
+        if (!overlap) break;
+        pos = text.indexOf(token, pos + 1);
+      }
+      if (pos !== -1) {
+        highlights.push({
+          start: pos,
+          end: pos + token.length,
+          id: `${pos}-${token}`,
+          meta: err,
+        });
+        for (let i = pos; i < pos + token.length && i < used.length; i++)
+          used[i] = true;
+      }
+    }
+    return highlights;
+  }
 
   return (
-    <div className="flex w-full gap-4 min-h-145">
-      <section className="bg-white rounded shadow p-4 flex-1 flex flex-col min-h-0">
-        <h2 className="text-lg font-medium mb-2">맞춤법 검사 입력</h2>
-        <textarea
-          className="flex-1 h-full min-h-0 resize-none border rounded p-3 focus:outline-none focus:ring"
-          placeholder="여기에 검사할 텍스트를 입력하세요..."
-          value={inputText}
-          onChange={(e) => setInputText(e.target.value)}
-          rows={10}
-        />
-        <div className="mt-3 flex items-center gap-2">
-          <button
-            className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
-            onClick={handleHanSpellChecker}
-          >
-            검사하기
-          </button>
-          <button
-            className="px-3 py-2 bg-gray-200 rounded hover:bg-gray-300"
-            onClick={() => setInputText('')}
-          >
-            지우기
-          </button>
-        </div>
-      </section>
+    <>
+      {loading && <div className="text-xs text-gray-500 mt-2">검사 중...</div>}
+      <div className="flex w-full gap-4 min-h-145 grow ">
+        <section className="bg-white rounded shadow p-4 flex-1 flex flex-col min-h-0">
+          <h2 className="text-lg font-medium mb-2">맞춤법 검사 입력</h2>
 
-      <section className="flex-1 bg-white rounded shadow p-4 flex flex-col min-h-0">
-        <h2 className="text-lg font-medium mb-2">결과</h2>
-        <div className="overflow-auto rounded space-y-3 flex-1 min-h-0">
-          {resultData && resultData.PnuErrorWordList.PnuErrorWord.length > 0 ? (
-            resultData.PnuErrorWordList.PnuErrorWord.map((word, idx) => (
-              <SpellHelper key={idx} wordList={word} />
-            ))
-          ) : (
-            <p className="text-gray-500">결과가 여기에 표시됩니다.</p>
-          )}
-        </div>
-      </section>
-    </div>
+          <HighlightSpelling
+            value={inputText}
+            highlights={computeHighlights(inputText)}
+            className="flex-1 h-full min-h-0 border rounded"
+            onClickHighlight={(h) => console.log('clicked highlight', h)}
+          />
+        </section>
+
+        <section className="flex-1 bg-white rounded shadow p-4 flex flex-col max-h-screen">
+          <h2 className="text-lg font-medium mb-2">결과</h2>
+          <div className="overflow-auto space-y-3 flex-1 min-h-0">
+            {(() => {
+              if (!resultData)
+                return (
+                  <p className="text-gray-500">결과가 여기에 표시됩니다.</p>
+                );
+              const raw = resultData.PnuErrorWordList?.PnuErrorWord;
+              const errorsArr = Array.isArray(raw) ? raw : raw ? [raw] : [];
+              if (errorsArr.length === 0)
+                return (
+                  <p className="text-gray-500">결과가 여기에 표시됩니다.</p>
+                );
+              return errorsArr.map((word, idx) => (
+                <SpellHelper key={idx} wordList={word} />
+              ));
+            })()}
+          </div>
+        </section>
+      </div>
+    </>
   );
 }
 
