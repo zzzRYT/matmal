@@ -1,4 +1,5 @@
 import { ipcRenderer, contextBridge } from 'electron';
+import type { SpellCheckerApiResponse } from './services/schema';
 
 declare global {
   interface Window {
@@ -7,7 +8,7 @@ declare global {
       hanSpell: (opts: {
         sentence: string;
         weakOpt?: number;
-      }) => Promise<unknown>;
+      }) => Promise<SpellCheckerApiResponse>;
     };
   }
 }

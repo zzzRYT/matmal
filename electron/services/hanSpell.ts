@@ -1,22 +1,22 @@
 import dotenv from 'dotenv';
 import { XMLParser } from 'fast-xml-parser';
+import { SpellCheckerApiResponse, SpellCheckerRequest } from './schema';
 
 dotenv.config();
 
 const DEFAULT_URL =
   'https://dcplxo2e85.execute-api.ap-northeast-2.amazonaws.com/v1/PnuWebSpeller/check';
 
-export async function hanSpellCheck(
-  sentence: string,
+export async function hanSpellCheck({
+  sentence,
   weakOpt = 0,
-  apiKey?: string
-) {
+}: SpellCheckerRequest): Promise<SpellCheckerApiResponse> {
   if (!sentence) {
     throw new Error('sentence is required');
   }
 
   const url = `${process.env.HANSPELL_URL || DEFAULT_URL}?weakOpt=${weakOpt}`;
-  const key = apiKey || process.env.HANSPELL_API_KEY;
+  const key = process.env.HANSPELL_API_KEY;
 
   const response = await fetch(url, {
     method: 'POST',
@@ -36,5 +36,5 @@ export async function hanSpellCheck(
   const xml = await response.text();
   const parser = new XMLParser();
   const json = parser.parse(xml);
-  return json;
+  return json.PnuNlpSpeller;
 }

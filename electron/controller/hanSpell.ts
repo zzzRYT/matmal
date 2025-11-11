@@ -9,7 +9,10 @@ export async function handleHanSpellCheck(
       return { error: 'sentence is required' };
     }
 
-    const data = await hanSpellCheck(opts.sentence, opts.weakOpt ?? 0);
+    const data = await hanSpellCheck({
+      sentence: opts.sentence,
+      weakOpt: opts.weakOpt,
+    });
     return data;
   } catch (error) {
     console.error('hanSpell check error:', error);
