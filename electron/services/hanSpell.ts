@@ -26,6 +26,7 @@ export async function hanSpellCheck({
     },
     body: JSON.stringify({ sentence }),
   });
+  console.log(response);
 
   if (!response.ok) {
     const text = await response.text().catch(() => '');

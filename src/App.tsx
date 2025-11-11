@@ -6,7 +6,7 @@ function App() {
   return (
     <div className="w-full flex flex-col bg-gray-50 min-h-screen">
       <Header />
-      <main className="flex-1 p-4 min-h-0 overflow-hidden">
+      <main className="flex-1 p-4">
         <Outlet />
       </main>
       <Footer />
