@@ -1,13 +1,13 @@
-import SpellChecker from './components/SpellChecker';
+import { Outlet } from 'react-router-dom';
 import Footer from './layout/Footer';
 import Header from './layout/Header';
 
 function App() {
   return (
-    <div className="w-full flex flex-col bg-gray-50">
+    <div className="w-full flex flex-col bg-gray-50 min-h-screen">
       <Header />
-      <main className="flex-1 p-4">
-        <SpellChecker />
+      <main className="flex-1 p-4 min-h-0 overflow-hidden">
+        <Outlet />
       </main>
       <Footer />
     </div>

@@ -1,4 +1,4 @@
-import { PnuErrorWord } from '../../electron/services/schema';
+import { PnuErrorWord } from '../../../electron/services/schema';
 import Instead from './Instead';
 
 interface SpellHelperProps {

@@ -1,4 +1,4 @@
-import { CandWord } from '../../electron/services/schema';
+import { CandWord } from '../../../electron/services/schema';
 
 interface InsteadProps {
   instead: CandWord;

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import SpellHelper from '../SpellHelper';
+import SpellHelper from './SpellHelper';
 
 import { SpellCheckerApiResponse } from '../../../electron/services/schema';
 
