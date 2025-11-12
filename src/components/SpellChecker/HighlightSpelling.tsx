@@ -60,7 +60,6 @@ export default function HighlightSpelling({
   }, []);
 
   useEffect(() => {
-    // if in overlay mode (onChange exists) we update innerHTML for underlay
     if (onChange && preRef.current) {
       preRef.current.innerHTML = highlightedHtml;
     }

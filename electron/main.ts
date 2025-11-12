@@ -1,20 +1,17 @@
-import { app, BrowserWindow, ipcMain } from 'electron';
-import { fileURLToPath } from 'node:url';
 import path from 'node:path';
-import { handleGeminiGenerate } from './controller/gemini';
-import { handleHanSpellCheck } from './controller/hanSpell';
+import { fileURLToPath } from 'node:url';
+import { app, Tray, globalShortcut, nativeImage } from 'electron';
+
+import {
+  createMainWindow as makeMainWindow,
+  mainWin,
+} from './windows/mainWindow';
+import { createQuickWindow as makeQuickWindow } from './windows/quickWindow';
+import { onGlobalHotkey } from './controller/onGlobalHotkey';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const preloadPath = path.join(__dirname, 'preload.mjs');
 
-// The built directory structure
-//
-// ├─┬─┬ dist
-// │ │ └── index.html
-// │ │
-// │ ├─┬ dist-electron
-// │ │ ├── main.js
-// │ │ └── preload.mjs
-// │
 process.env.APP_ROOT = path.join(__dirname, '..');
 
 // 🚧 Use ['ENV_NAME'] avoid vite:define plugin - Vite@2.x
@@ -26,50 +23,46 @@ process.env.VITE_PUBLIC = VITE_DEV_SERVER_URL
   ? path.join(process.env.APP_ROOT, 'public')
   : RENDERER_DIST;
 
-let win: BrowserWindow | null;
+// mainWin and quickWin are created in their respective modules
+let tray: Tray | null;
 
-function createWindow() {
-  win = new BrowserWindow({
-    icon: path.join(process.env.VITE_PUBLIC, 'electron-vite.svg'),
-    webPreferences: {
-      preload: path.join(__dirname, 'preload.mjs'),
-    },
-    width: 1000,
-    height: 750,
-  });
-
-  // Test active push message to Renderer-process.
-  win.webContents.on('did-finish-load', () => {
-    win?.webContents.send('main-process-message', new Date().toLocaleString());
-  });
-
-  ipcMain.handle('generate', handleGeminiGenerate);
-  ipcMain.handle('hanSpell-check', handleHanSpellCheck);
-
-  if (VITE_DEV_SERVER_URL) {
-    win.loadURL(VITE_DEV_SERVER_URL);
-  } else {
-    // win.loadFile('dist/index.html')
-    win.loadFile(path.join(RENDERER_DIST, 'index.html'));
-  }
-}
-
-// Quit when all windows are closed, except on macOS. There, it's common
-// for applications and their menu bar to stay active until the user quits
-// explicitly with Cmd + Q.
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
     app.quit();
-    win = null;
   }
 });
 
 app.on('activate', () => {
-  // On OS X it's common to re-create a window in the app when the
-  // dock icon is clicked and there are no other windows open.
-  if (BrowserWindow.getAllWindows().length === 0) {
-    createWindow();
+  // On macOS re-create windows when the dock icon is clicked and there are no open windows.
+  if (makeMainWindow && makeQuickWindow) {
+    makeMainWindow(RENDERER_DIST, VITE_DEV_SERVER_URL);
+    makeQuickWindow(RENDERER_DIST, VITE_DEV_SERVER_URL);
   }
 });
 
-app.whenReady().then(createWindow);
+app.whenReady().then(() => {
+  makeMainWindow(RENDERER_DIST, VITE_DEV_SERVER_URL, preloadPath);
+  makeQuickWindow(RENDERER_DIST, VITE_DEV_SERVER_URL, preloadPath);
+
+  const accelerator = 'CommandOrControl+D+D';
+  const ok = globalShortcut.register(accelerator, () => {
+    onGlobalHotkey();
+  });
+  if (!ok) {
+    console.warn('Global hotkey registration failed for', accelerator);
+  }
+
+  // create tray (optional) to keep app running in background
+  const icon = nativeImage.createFromPath(
+    path.join(__dirname, '..', 'icon.png')
+  );
+  tray = new Tray(icon);
+  tray.setToolTip('My Spell App');
+  tray.on('double-click', () => {
+    if (mainWin) mainWin?.show();
+  });
+});
+
+app.on('will-quit', () => {
+  globalShortcut.unregisterAll();
+});

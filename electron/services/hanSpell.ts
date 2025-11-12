@@ -4,9 +4,7 @@ import { SpellCheckerApiResponse, SpellCheckerRequest } from './schema';
 
 dotenv.config();
 
-const DEFAULT_URL =
-  'https://dcplxo2e85.execute-api.ap-northeast-2.amazonaws.com/v1/PnuWebSpeller/check';
-
+const DEFAULT_URL = import.meta.env.HANSPELL_URL;
 export async function hanSpellCheck({
   sentence,
   weakOpt = 0,
@@ -26,8 +24,6 @@ export async function hanSpellCheck({
     },
     body: JSON.stringify({ sentence }),
   });
-  console.log(response);
-
   if (!response.ok) {
     const text = await response.text().catch(() => '');
     throw new Error(

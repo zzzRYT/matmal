@@ -12,9 +12,26 @@ function SpellCheckerPage() {
     setText(spell ?? '');
   }, []);
 
+  useEffect(() => {
+    const handleSelection = (_event: unknown, txt: string) => {
+      setText(txt ?? '');
+    };
+    const handleHotkey = () => {
+      // optional: could focus an input inside this page
+    };
+
+    window.ipcRenderer.on('selection-text', handleSelection);
+    window.ipcRenderer.on('hotkey-pressed', handleHotkey);
+
+    return () => {
+      window.ipcRenderer.off('selection-text', handleSelection);
+      window.ipcRenderer.off('hotkey-pressed', handleHotkey);
+    };
+  }, []);
+
   return (
     <div>
-      <Button variant="primary" onClick={() => navigate(-1)} className="mb-4">
+      <Button variant="primary" onClick={() => navigate('/')} className="mb-4">
         텍스트 입력하러 가기
       </Button>
       <SpellChecker inputText={text} />
