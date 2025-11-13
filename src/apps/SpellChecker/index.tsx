@@ -15,12 +15,8 @@ function SpellChecker({ inputText }: SpellChecker) {
   );
 
   const callGenerateSpell = async () => {
-    try {
-      const res = await window.api.generate({ sentence: inputText });
-      setResultData(res as SpellCheckerApiResponse);
-    } catch (err) {
-      console.error('hanSpell error', err);
-    }
+    const res = await window.api.generate({ sentence: inputText });
+    setResultData(res as SpellCheckerApiResponse);
   };
 
   useEffect(() => {
@@ -31,20 +27,19 @@ function SpellChecker({ inputText }: SpellChecker) {
     callGenerateSpell();
   }, [inputText]);
 
-  if (!resultData) {
-    return <div>로딩중...</div>;
-  }
-
   return (
     <>
       <div className="flex w-full gap-4 min-h-145 grow ">
         <section className="bg-white rounded shadow p-4 flex-1 flex flex-col min-h-0">
           <h2 className="text-lg font-medium mb-2">맞춤법 검사 입력</h2>
-
-          <HighlightSpelling
-            originWords={inputText}
-            errorWordsData={resultData}
-          />
+          {resultData ? (
+            <HighlightSpelling
+              originWords={inputText}
+              errorWordsData={resultData}
+            />
+          ) : (
+            <div>검사중...</div>
+          )}
         </section>
 
         <section className="flex-1 bg-white rounded shadow p-4 flex flex-col max-h-screen">
@@ -56,12 +51,11 @@ function SpellChecker({ inputText }: SpellChecker) {
                   <p className="text-gray-500">결과가 여기에 표시됩니다.</p>
                 );
               const raw = resultData.PnuErrorWordList?.PnuErrorWord;
-              const errorsArr = Array.isArray(raw) ? raw : raw ? [raw] : [];
-              if (errorsArr.length === 0)
+              if (raw.length === 0)
                 return (
                   <p className="text-gray-500">결과가 여기에 표시됩니다.</p>
                 );
-              return errorsArr.map((word, idx) => (
+              return raw.map((word, idx) => (
                 <SpellHelper key={idx} wordList={word} />
               ));
             })()}

@@ -14,7 +14,7 @@ dotenv.config();
 
 export async function geminiGenerate(contents: string) {
   const response = await ai.models.generateContent({
-    model: 'gemini-2.5-flash',
+    model: 'gemini-2.5-flash-lite',
     contents,
   });
 
