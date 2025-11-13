@@ -1,4 +1,4 @@
-import UserInput from '../../components/UserInput';
+import UserInput from '../../apps/UserInput';
 
 function UserInputPage() {
   return <UserInput />;

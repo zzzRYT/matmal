@@ -45,30 +45,12 @@ export async function checkSpelling(
         ? raw.slice(firstBrace, lastBrace + 1)
         : raw;
 
-    let resultObject: unknown = null;
-    try {
-      resultObject = JSON.parse(candidate);
-    } catch (err) {
-      try {
-        resultObject = typeof raw === 'object' ? raw : JSON.parse(raw);
-      } catch (err2) {
-        console.error(
-          'LLM 응답 파싱 오류 (candidate/json):',
-          err,
-          err2,
-          'raw:',
-          raw
-        );
-        return null;
-      }
-    }
-
-    const asObj = resultObject;
-    if (!asObj) {
+    const resultObject = JSON.parse(candidate);
+    if (!resultObject) {
       console.warn('LLM 반환값이 예상 스키마를 따르지 않습니다.', resultObject);
       return null;
     }
-    return asObj as unknown as SpellCheckerApiResponse;
+    return resultObject as unknown as SpellCheckerApiResponse;
   } catch (error) {
     console.error('LLM 응답 파싱 오류:', error);
     return null;
