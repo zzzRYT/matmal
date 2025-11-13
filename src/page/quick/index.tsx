@@ -1,36 +1,10 @@
-import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Button from '../../components/UI/Button';
+import { useSelectionSpell } from '../../hooks/useSelectionSpell';
 
 function QuickSpellPage() {
   const navigate = useNavigate();
-  const [text, setText] = useState('');
-
-  useEffect(() => {
-    const handleSelection = (_event: unknown, txt: string) => {
-      const v = (txt ?? '') as string;
-      setText(v);
-      // persist so /result page can read it
-      window.localStorage.setItem('spell', v);
-      // navigate to result to show SpellChecker
-      navigate('/result');
-    };
-
-    const handleHotkey = () => {
-      // focus input if UI exists
-      const el = document.getElementById(
-        'quick-input'
-      ) as HTMLTextAreaElement | null;
-      if (el) el.focus();
-    };
-
-    window.ipcRenderer.on('selection-text', handleSelection);
-    window.ipcRenderer.on('hotkey-pressed', handleHotkey);
-    return () => {
-      window.ipcRenderer.off('selection-text', handleSelection);
-      window.ipcRenderer.off('hotkey-pressed', handleHotkey);
-    };
-  }, [navigate]);
+  const { text, setText } = useSelectionSpell({ to: '/result' });
 
   return (
     <div className="p-4">

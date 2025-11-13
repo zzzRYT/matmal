@@ -13,19 +13,14 @@ function SpellCheckerPage() {
   }, []);
 
   useEffect(() => {
-    const handleSelection = (_event: unknown, txt: string) => {
-      setText(txt ?? '');
-    };
-    const handleHotkey = () => {
-      // optional: could focus an input inside this page
+    const handleSelection = (_event: unknown, text: string) => {
+      setText(text);
     };
 
     window.ipcRenderer.on('selection-text', handleSelection);
-    window.ipcRenderer.on('hotkey-pressed', handleHotkey);
 
     return () => {
       window.ipcRenderer.off('selection-text', handleSelection);
-      window.ipcRenderer.off('hotkey-pressed', handleHotkey);
     };
   }, []);
 

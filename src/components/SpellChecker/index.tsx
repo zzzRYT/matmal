@@ -25,7 +25,7 @@ function SpellChecker({ inputText }: SpellChecker) {
     setLoading(true);
     const t = setTimeout(async () => {
       try {
-        const res = await window.api.hanSpell({ sentence: inputText });
+        const res = await window.api.generate({ sentence: inputText });
         if (!cancelled) setResultData(res as SpellCheckerApiResponse);
       } catch (err) {
         console.error('hanSpell error', err);

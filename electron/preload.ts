@@ -4,7 +4,9 @@ import type { SpellCheckerApiResponse } from './services/schema';
 declare global {
   interface Window {
     api: {
-      generate: (opts: { contents: string }) => Promise<string>;
+      generate: (opts: {
+        sentence: string;
+      }) => Promise<SpellCheckerApiResponse>;
       hanSpell: (opts: {
         sentence: string;
         weakOpt?: number;
@@ -35,7 +37,7 @@ contextBridge.exposeInMainWorld('ipcRenderer', {
 });
 
 contextBridge.exposeInMainWorld('api', {
-  generate: (opts: { contents: string }) =>
+  generate: (opts: { sentence: string }) =>
     ipcRenderer.invoke('generate', opts),
   hanSpell: (opts: { sentence: string; weakOpt?: number }) =>
     ipcRenderer.invoke('hanSpell-check', opts),
