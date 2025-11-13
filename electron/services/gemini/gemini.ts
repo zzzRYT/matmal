@@ -53,6 +53,6 @@ export async function checkSpelling(
     return resultObject as unknown as SpellCheckerApiResponse;
   } catch (error) {
     console.error('LLM 응답 파싱 오류:', error);
-    return null;
+    throw new Error('LLM 응답 파싱 오류');
   }
 }
