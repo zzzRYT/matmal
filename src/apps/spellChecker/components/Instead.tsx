@@ -1,4 +1,5 @@
 import { useStore } from 'zustand';
+import { clsx } from 'clsx';
 
 import { CandWord } from '../../../../electron/services/schema';
 import { useSpellCheck } from '../../../shared/stores/spell';
@@ -14,6 +15,12 @@ function Instead({ instead, original }: InsteadProps) {
     return null;
   }
 
+  console.log(instead);
+
+  const highlightBox = clsx(
+    'inline-block px-2 py-1 bg-yellow-100 text-sm rounded hover:bg-yellow-200 cursor-pointer'
+  );
+
   if (!Array.isArray(instead.CandWord)) {
     return (
       <button
@@ -21,7 +28,7 @@ function Instead({ instead, original }: InsteadProps) {
         onClick={() =>
           replaceOccurrence(original ?? '', String(instead.CandWord), 1)
         }
-        className="inline-block px-2 py-1 bg-yellow-100 text-sm rounded hover:bg-yellow-200"
+        className={highlightBox}
       >
         {instead.CandWord}
       </button>
@@ -35,7 +42,7 @@ function Instead({ instead, original }: InsteadProps) {
           <button
             type="button"
             onClick={() => replaceOccurrence(original ?? '', word, 1)}
-            className="inline-block px-2 py-1 bg-yellow-100 text-sm rounded hover:bg-yellow-200"
+            className={highlightBox}
           >
             {word}
           </button>
