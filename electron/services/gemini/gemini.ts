@@ -14,7 +14,7 @@ dotenv.config();
 
 export async function geminiGenerate(contents: string) {
   const response = await ai.models.generateContent({
-    model: 'gemini-2.5-flash',
+    model: 'gemini-2.5-flash-lite',
     contents,
   });
 
@@ -53,6 +53,6 @@ export async function checkSpelling(
     return resultObject as unknown as SpellCheckerApiResponse;
   } catch (error) {
     console.error('LLM 응답 파싱 오류:', error);
-    return null;
+    throw new Error('LLM 응답 파싱 오류');
   }
 }

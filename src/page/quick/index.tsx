@@ -1,4 +1,4 @@
-import SpellChecker from '../../apps/SpellChecker';
+import SpellChecker from '../../apps/spellChecker/components/SpellChecker';
 
 function QuickSpellPage() {
   // [TODO]: 자동으로 drag한 입력이 들어올 수 있도록 구현

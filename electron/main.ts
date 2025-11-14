@@ -6,7 +6,6 @@ import {
   createMainWindow as makeMainWindow,
   mainWin,
 } from './windows/mainWindow';
-import { createQuickWindow as makeQuickWindow } from './windows/quickWindow';
 import { onGlobalHotkey } from './controller/onGlobalHotkey';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -34,15 +33,13 @@ app.on('window-all-closed', () => {
 
 app.on('activate', () => {
   // On macOS re-create windows when the dock icon is clicked and there are no open windows.
-  if (makeMainWindow && makeQuickWindow) {
+  if (makeMainWindow) {
     makeMainWindow(RENDERER_DIST, VITE_DEV_SERVER_URL);
-    makeQuickWindow(RENDERER_DIST, VITE_DEV_SERVER_URL);
   }
 });
 
 app.whenReady().then(() => {
   makeMainWindow(RENDERER_DIST, VITE_DEV_SERVER_URL, preloadPath);
-  makeQuickWindow(RENDERER_DIST, VITE_DEV_SERVER_URL, preloadPath);
 
   const accelerator = 'CommandOrControl+D+D';
   const ok = globalShortcut.register(accelerator, () => {

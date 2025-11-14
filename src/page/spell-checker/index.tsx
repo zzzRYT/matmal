@@ -1,8 +1,9 @@
-import SpellChecker from '../../apps/SpellChecker';
 import { useNavigate } from 'react-router-dom';
-import Button from '../../shared/components/ui/Button';
 import { useStore } from 'zustand';
 import { useSpellCheck } from '../../shared/stores/spell';
+
+import Button from '../../shared/components/ui/Button';
+import SpellChecker from '../../apps/spellChecker/components/SpellChecker';
 
 function SpellCheckerPage() {
   const navigate = useNavigate();
