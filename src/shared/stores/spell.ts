@@ -2,10 +2,8 @@ import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 
 type SpellState = {
-  // current text under inspection
   spell: string;
   setSpell: (sentence: string) => void;
-  // replace the n-th occurrence of `from` with `to` inside spell
   replaceOccurrence: (from: string, to: string, occurrence?: number) => void;
 };
 
