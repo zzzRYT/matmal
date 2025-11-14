@@ -1,5 +1,9 @@
 import { useCallback, useMemo } from 'react';
-import { SpellCheckerApiResponse } from '../../../electron/services/schema';
+import { useSpellCheck } from '../../../shared/stores/spell';
+
+import { SpellCheckerApiResponse } from '../../../../electron/services/schema';
+
+import { getCandWord } from '../utils';
 
 interface HighlightSpellingProps {
   originWords: string;
@@ -24,18 +28,17 @@ function HighlightSpelling({
   const errorMap = useMemo(() => {
     const map: Record<string, string> = {};
     errorList.forEach((item) => {
-      const cand =
-        typeof item.CandWordList.CandWord === 'string'
-          ? item.CandWordList.CandWord
-          : Array.isArray(item.CandWordList.CandWord)
-          ? item.CandWordList.CandWord[0]
-          : '';
-      map[item.OrgStr] = cand;
+      const word = getCandWord(item);
+      if (item.OrgStr !== word) {
+        map[item.OrgStr] = word;
+      }
     });
     return map;
   }, [errorList]);
 
-  const tokens = errorList.map((e) => e.OrgStr);
+  const tokens = errorList.map((errorWord) => errorWord.OrgStr);
+
+  const replaceOccurrence = useSpellCheck((s) => s.replaceOccurrence);
 
   const highlight = useCallback(
     (text: string, queries: string[]) => {
@@ -44,6 +47,7 @@ function HighlightSpelling({
       const pattern = queries.map(escapeRegExp).join('|');
       const regex = new RegExp(`(${pattern})`, 'gi');
       const parts = text.split(regex);
+      const countsSeen: Record<string, number> = {};
 
       return (
         <>
@@ -54,14 +58,23 @@ function HighlightSpelling({
 
             if (matchedKey && errorMap[matchedKey]) {
               const candWord = errorMap[matchedKey];
+              countsSeen[matchedKey] = (countsSeen[matchedKey] ?? 0) + 1;
+              const occurrence = countsSeen[matchedKey];
+
               return (
                 <div
                   key={`highlight-${index}`}
                   className="relative px-1 rounded text-black inline-block overflow-visible pt-6"
                 >
-                  <span className="absolute top-0 left-0 w-max text-xs text-blue-600 font-semibold bg-white border border-blue-300 rounded px-1 shadow-sm whitespace-nowrap">
+                  <button
+                    type="button"
+                    onClick={() =>
+                      replaceOccurrence(matchedKey, candWord, occurrence)
+                    }
+                    className="absolute top-0 left-0 w-max text-xs text-blue-600 font-semibold bg-white border border-blue-300 rounded px-1 shadow-sm whitespace-nowrap"
+                  >
                     {candWord}
-                  </span>
+                  </button>
                   <mark className="bg-yellow-100">{part}</mark>
                 </div>
               );
@@ -72,7 +85,7 @@ function HighlightSpelling({
         </>
       );
     },
-    [errorMap]
+    [errorMap, replaceOccurrence]
   );
 
   return (

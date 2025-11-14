@@ -1,31 +1,38 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
+import { useSpellCheck } from '../../../shared/stores/spell';
+
+import { SpellCheckerApiResponse } from '../../../../electron/services/schema';
 
 import SpellHelper from './SpellHelper';
 import HighlightSpelling from './HighlightSpelling';
-
-import { SpellCheckerApiResponse } from '../../../electron/services/schema';
+import { getCandWord } from '../utils';
+import { useStore } from 'zustand';
 
 interface SpellChecker {
   inputText: string;
 }
 
 function SpellChecker({ inputText }: SpellChecker) {
+  // use global store for text to reduce prop drilling
+  const { spell, setSpell } = useStore(useSpellCheck);
+
   const [resultData, setResultData] = useState<SpellCheckerApiResponse | null>(
     null
   );
 
-  const callGenerateSpell = async () => {
-    const res = await window.api.generate({ sentence: inputText });
+  const didMountRef = useRef(false);
+
+  const callGenerateSpell = async (sentence?: string) => {
+    const res = await window.api.generate({ sentence: sentence ?? spell });
     setResultData(res as SpellCheckerApiResponse);
+    setSpell(inputText);
   };
 
   useEffect(() => {
-    if (!inputText) {
-      setResultData(null);
-      return;
-    }
+    if (didMountRef.current) return;
+    didMountRef.current = true;
     callGenerateSpell();
-  }, [inputText]);
+  }, []);
 
   return (
     <>
@@ -34,7 +41,7 @@ function SpellChecker({ inputText }: SpellChecker) {
           <h2 className="text-lg font-medium mb-2">맞춤법 검사 입력</h2>
           {resultData ? (
             <HighlightSpelling
-              originWords={inputText}
+              originWords={spell}
               errorWordsData={resultData}
             />
           ) : (
@@ -55,9 +62,12 @@ function SpellChecker({ inputText }: SpellChecker) {
                 return (
                   <p className="text-gray-500">결과가 여기에 표시됩니다.</p>
                 );
-              return raw.map((word, idx) => (
-                <SpellHelper key={idx} wordList={word} />
-              ));
+              return raw.map((word, idx) => {
+                const currentWord = getCandWord(word);
+                if (currentWord !== word.OrgStr) {
+                  return <SpellHelper key={idx} checkWord={word} />;
+                }
+              });
             })()}
           </div>
         </section>
