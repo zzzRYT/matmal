@@ -2,6 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import Button from '../../shared/components/ui/Button';
 import { useStore } from 'zustand';
 import { useSpellCheck } from '../../shared/stores/spell';
+import { toast } from 'react-toastify';
 
 function UserInput() {
   const navigate = useNavigate();
@@ -9,7 +10,7 @@ function UserInput() {
 
   const handleSpellingStart = () => {
     if (spell.length <= 0) {
-      alert('검사할 입력이 필요합니다.');
+      toast.error('검사할 항목을 입력해 주세요.');
       return;
     }
     setSpell(spell);
