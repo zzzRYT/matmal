@@ -10,12 +10,12 @@ function SpellCheckerPage() {
   const { spell } = useStore(useSpellCheck);
 
   return (
-    <div>
+    <>
       <Button variant="primary" onClick={() => navigate('/')} className="mb-4">
         텍스트 입력하러 가기
       </Button>
       <SpellChecker inputText={spell} />
-    </div>
+    </>
   );
 }
 

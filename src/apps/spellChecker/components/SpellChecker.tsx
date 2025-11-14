@@ -1,25 +1,24 @@
 import { useEffect, useState, useRef } from 'react';
-import { useSpellCheck } from '../../../shared/stores/spell';
+import { useStore } from 'zustand';
 
 import { SpellCheckerApiResponse } from '../../../../electron/services/schema';
 
 import SpellHelper from './SpellHelper';
 import HighlightSpelling from './HighlightSpelling';
-import { getCandWord } from '../utils';
-import { useStore } from 'zustand';
+import { getCandWord, handleClipboard } from '../utils';
+
+import Button from '../../../shared/components/ui/Button';
+import { useSpellCheck } from '../../../shared/stores/spell';
 
 interface SpellChecker {
   inputText: string;
 }
 
 function SpellChecker({ inputText }: SpellChecker) {
-  // use global store for text to reduce prop drilling
   const { spell, setSpell } = useStore(useSpellCheck);
-
   const [resultData, setResultData] = useState<SpellCheckerApiResponse | null>(
     null
   );
-
   const didMountRef = useRef(false);
 
   const callGenerateSpell = async (sentence?: string) => {
@@ -36,20 +35,25 @@ function SpellChecker({ inputText }: SpellChecker) {
 
   return (
     <>
-      <div className="flex w-full gap-4 min-h-145 grow ">
-        <section className="bg-white rounded shadow p-4 flex-1 flex flex-col min-h-0">
+      <div className="flex w-full gap-4">
+        <section className="bg-white rounded shadow p-4 flex-1 flex flex-col h-120">
           <h2 className="text-lg font-medium mb-2">맞춤법 검사 입력</h2>
-          {resultData ? (
-            <HighlightSpelling
-              originWords={spell}
-              errorWordsData={resultData}
-            />
-          ) : (
-            <div>검사중...</div>
-          )}
+          <div className="flex-1 overflow-auto">
+            {resultData ? (
+              <HighlightSpelling
+                originWords={spell}
+                errorWordsData={resultData}
+              />
+            ) : (
+              <div>검사중...</div>
+            )}
+          </div>
+          <div className="flex justify-end gap-4">
+            <Button onClick={() => handleClipboard(spell)}>Copy</Button>
+          </div>
         </section>
 
-        <section className="flex-1 bg-white rounded shadow p-4 flex flex-col max-h-screen">
+        <section className="flex-1 bg-white rounded shadow p-4 flex flex-col h-120">
           <h2 className="text-lg font-medium mb-2">결과</h2>
           <div className="overflow-auto space-y-3 flex-1 min-h-0">
             {(() => {
