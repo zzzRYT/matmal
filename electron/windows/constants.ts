@@ -4,7 +4,7 @@ export const FRAME = {
     HEIGHT: 750,
   },
   QUICK: {
-    WIDTH: 450,
-    HEIGHT: 200,
+    WIDTH: 350,
+    HEIGHT: 400,
   },
 };
