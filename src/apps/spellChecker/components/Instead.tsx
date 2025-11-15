@@ -15,8 +15,6 @@ function Instead({ instead, original }: InsteadProps) {
     return null;
   }
 
-  console.log(instead);
-
   const highlightBox = clsx(
     'inline-block px-2 py-1 bg-yellow-100 text-sm rounded hover:bg-yellow-200 cursor-pointer'
   );
