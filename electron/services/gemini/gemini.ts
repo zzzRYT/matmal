@@ -32,6 +32,7 @@ export async function geminiGenerate(contents: string) {
 export async function checkSpelling(
   text: string
 ): Promise<SpellCheckerApiResponse | null> {
+  console.log('text', text);
   const prompt = getSpellCheckPrompt(text);
 
   try {

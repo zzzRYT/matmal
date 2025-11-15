@@ -1,11 +1,13 @@
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { app, globalShortcut } from 'electron';
+import { app, globalShortcut, ipcMain, BrowserWindow } from 'electron';
 
 import { createMainWindow as makeMainWindow } from './windows/mainWindow';
 import { quickWin } from './windows/quickWindow';
 import { createQuickWindow } from './windows/quickWindow';
 import { DIRNAME } from './paths';
+import { handleGeminiGenerate } from './controller/gemini';
+import { handleHanSpellCheck } from './controller/hanSpell';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const preloadPath = path.join(__dirname, 'preload.mjs');
@@ -25,16 +27,23 @@ app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
     app.quit();
   }
+  ipcMain.removeHandler('generate');
+  ipcMain.removeHandler('hanSpell-check');
 });
 
 app.on('activate', () => {
-  // On macOS re-create windows when the dock icon is clicked and there are no open windows.
-  if (makeMainWindow) {
-    makeMainWindow(RENDERER_DIST, VITE_DEV_SERVER_URL);
+  if (BrowserWindow.getAllWindows().length === 0) {
+    ipcMain.handle('generate', handleGeminiGenerate);
+    ipcMain.handle('hanSpell-check', handleHanSpellCheck);
+
+    makeMainWindow(RENDERER_DIST, VITE_DEV_SERVER_URL, preloadPath);
   }
 });
 
 app.whenReady().then(() => {
+  ipcMain.handle('generate', handleGeminiGenerate);
+  ipcMain.handle('hanSpell-check', handleHanSpellCheck);
+
   makeMainWindow(RENDERER_DIST, VITE_DEV_SERVER_URL, preloadPath);
 
   globalShortcut.register('CommandOrControl+Shift+D', () => {

@@ -1,8 +1,6 @@
 import path from 'node:path';
-import { BrowserWindow, ipcMain } from 'electron';
+import { BrowserWindow } from 'electron';
 import { FRAME } from './constants';
-import { handleGeminiGenerate } from '../controller/gemini';
-import { handleHanSpellCheck } from '../controller/hanSpell';
 
 export let mainWin: BrowserWindow | null = null;
 
@@ -33,9 +31,6 @@ export function createMainWindow(
   mainWin.on('closed', () => {
     mainWin = null;
   });
-
-  ipcMain.handle('generate', handleGeminiGenerate);
-  ipcMain.handle('hanSpell-check', handleHanSpellCheck);
 
   if (VITE_DEV_SERVER_URL) {
     mainWin.loadURL(VITE_DEV_SERVER_URL);
