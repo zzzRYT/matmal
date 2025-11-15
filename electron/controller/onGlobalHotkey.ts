@@ -1,7 +1,6 @@
 import path from 'node:path';
 import { mainWin } from '../windows/mainWindow';
 import { quickWin, createQuickWindow } from '../windows/quickWindow';
-import { captureSelectionViaCopy } from '../services/captureSelectionViaCopy';
 import { screen } from 'electron';
 import { FRAME, RENDERER_DIST, VITE_DEV_SERVER_URL, DIRNAME } from '../paths';
 
@@ -16,7 +15,6 @@ export async function onGlobalHotkey() {
       }
     }
 
-    const text = await captureSelectionViaCopy();
     const point = screen.getCursorScreenPoint();
 
     if (quickWin) {
@@ -28,7 +26,6 @@ export async function onGlobalHotkey() {
         quickWin.show();
         quickWin.focus();
         quickWin.webContents.send('hotkey-pressed');
-        quickWin.webContents.send('selection-text', text);
       } catch (err) {
         console.warn('Failed to update quickWin', err);
       }
@@ -38,7 +35,6 @@ export async function onGlobalHotkey() {
     if (mainWin) {
       try {
         mainWin.webContents.send('navigate-to', '/result');
-        mainWin.webContents.send('selection-text', text);
       } catch (err) {
         console.warn('Failed to send to mainWin', err);
       }

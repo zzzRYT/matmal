@@ -19,8 +19,8 @@ export function createMainWindow(
     webPreferences: {
       preload: preloadPath ?? path.join(RENDERER_DIST, 'preload.mjs'),
     },
-    width: FRAME.WIDTH,
-    height: FRAME.HEIGHT,
+    width: FRAME.MAIN.WIDTH,
+    height: FRAME.MAIN.HEIGHT,
   });
 
   mainWin.webContents.on('did-finish-load', () => {
@@ -34,7 +34,6 @@ export function createMainWindow(
     mainWin = null;
   });
 
-  // register simple handlers here (these call services/controllers)
   ipcMain.handle('generate', handleGeminiGenerate);
   ipcMain.handle('hanSpell-check', handleHanSpellCheck);
 

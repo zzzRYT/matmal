@@ -1,4 +1,10 @@
 export const FRAME = {
-  WIDTH: 1000,
-  HEIGHT: 750,
+  MAIN: {
+    WIDTH: 1000,
+    HEIGHT: 750,
+  },
+  QUICK: {
+    WIDTH: 450,
+    HEIGHT: 200,
+  },
 };

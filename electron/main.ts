@@ -1,12 +1,11 @@
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { app, Tray, globalShortcut, nativeImage } from 'electron';
+import { app, globalShortcut } from 'electron';
 
-import {
-  createMainWindow as makeMainWindow,
-  mainWin,
-} from './windows/mainWindow';
-import { onGlobalHotkey } from './controller/onGlobalHotkey';
+import { createMainWindow as makeMainWindow } from './windows/mainWindow';
+import { quickWin } from './windows/quickWindow';
+import { createQuickWindow } from './windows/quickWindow';
+import { DIRNAME } from './paths';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const preloadPath = path.join(__dirname, 'preload.mjs');
@@ -21,9 +20,6 @@ export const RENDERER_DIST = path.join(process.env.APP_ROOT, 'dist');
 process.env.VITE_PUBLIC = VITE_DEV_SERVER_URL
   ? path.join(process.env.APP_ROOT, 'public')
   : RENDERER_DIST;
-
-// mainWin and quickWin are created in their respective modules
-let tray: Tray | null;
 
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
@@ -41,22 +37,11 @@ app.on('activate', () => {
 app.whenReady().then(() => {
   makeMainWindow(RENDERER_DIST, VITE_DEV_SERVER_URL, preloadPath);
 
-  const accelerator = 'CommandOrControl+D+D';
-  const ok = globalShortcut.register(accelerator, () => {
-    onGlobalHotkey();
-  });
-  if (!ok) {
-    console.warn('Global hotkey registration failed for', accelerator);
-  }
-
-  // create tray (optional) to keep app running in background
-  const icon = nativeImage.createFromPath(
-    path.join(__dirname, '..', 'icon.png')
-  );
-  tray = new Tray(icon);
-  tray.setToolTip('My Spell App');
-  tray.on('double-click', () => {
-    if (mainWin) mainWin?.show();
+  globalShortcut.register('CommandOrControl+Shift+D', () => {
+    const preloadPath = path.join(DIRNAME, 'preload.mjs');
+    createQuickWindow(RENDERER_DIST, VITE_DEV_SERVER_URL, preloadPath);
+    quickWin?.show();
+    quickWin?.focus();
   });
 });
 
