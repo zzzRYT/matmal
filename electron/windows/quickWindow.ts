@@ -10,8 +10,8 @@ export function createQuickWindow(
   preloadPath?: string
 ) {
   quickWin = new BrowserWindow({
-    width: FRAME.WIDTH,
-    height: FRAME.HEIGHT,
+    width: FRAME.QUICK.WIDTH,
+    height: FRAME.QUICK.HEIGHT,
     show: false,
     frame: true,
     resizable: false,

@@ -71,7 +71,7 @@ function HighlightSpelling({
                     onClick={() =>
                       replaceOccurrence(matchedKey, candWord, occurrence)
                     }
-                    className="absolute top-0 left-0 w-max text-xs text-blue-600 font-semibold bg-white border border-blue-300 rounded px-1 shadow-sm whitespace-nowrap"
+                    className="absolute top-0 left-0 w-max text-xs text-blue-600 font-semibold bg-white border border-blue-300 rounded px-1 shadow-sm whitespace-nowrap cursor-pointer"
                   >
                     {candWord}
                   </button>
