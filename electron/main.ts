@@ -5,7 +5,6 @@ import { app, globalShortcut, ipcMain, BrowserWindow } from 'electron';
 import { createMainWindow as makeMainWindow } from './windows/mainWindow';
 import { quickWin } from './windows/quickWindow';
 import { createQuickWindow } from './windows/quickWindow';
-import { DIRNAME } from './paths';
 import { handleGeminiGenerate } from './controller/gemini';
 import { handleHanSpellCheck } from './controller/hanSpell';
 
@@ -27,15 +26,10 @@ app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
     app.quit();
   }
-  ipcMain.removeHandler('generate');
-  ipcMain.removeHandler('hanSpell-check');
 });
 
 app.on('activate', () => {
   if (BrowserWindow.getAllWindows().length === 0) {
-    ipcMain.handle('generate', handleGeminiGenerate);
-    ipcMain.handle('hanSpell-check', handleHanSpellCheck);
-
     makeMainWindow(RENDERER_DIST, VITE_DEV_SERVER_URL, preloadPath);
   }
 });
@@ -47,7 +41,6 @@ app.whenReady().then(() => {
   makeMainWindow(RENDERER_DIST, VITE_DEV_SERVER_URL, preloadPath);
 
   globalShortcut.register('CommandOrControl+Shift+D', () => {
-    const preloadPath = path.join(DIRNAME, 'preload.mjs');
     createQuickWindow(RENDERER_DIST, VITE_DEV_SERVER_URL, preloadPath);
     quickWin?.show();
     quickWin?.focus();
@@ -56,4 +49,10 @@ app.whenReady().then(() => {
 
 app.on('will-quit', () => {
   globalShortcut.unregisterAll();
+  try {
+    ipcMain.removeHandler('generate');
+    ipcMain.removeHandler('hanSpell-check');
+  } catch (e) {
+    console.error('electron quit error');
+  }
 });
