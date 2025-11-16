@@ -18,6 +18,8 @@ export const VITE_PUBLIC = VITE_DEV_SERVER_URL
   ? path.join(APP_ROOT, 'public')
   : RENDERER_DIST;
 
+export const PRELOAD_PATH = path.join(DIRNAME, 'preload.mjs');
+
 export const FRAME = { WIDTH: 1000, HEIGHT: 750 };
 
 export default {

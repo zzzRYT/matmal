@@ -11,6 +11,7 @@ declare global {
         sentence: string;
         weakOpt?: number;
       }) => Promise<SpellCheckerApiResponse>;
+      onNavigate: (path: string) => Promise<void>;
     };
   }
 }
@@ -41,4 +42,5 @@ contextBridge.exposeInMainWorld('api', {
     ipcRenderer.invoke('generate', opts),
   hanSpell: (opts: { sentence: string; weakOpt?: number }) =>
     ipcRenderer.invoke('hanSpell-check', opts),
+  onNavigate: (path: string) => ipcRenderer.invoke('navigate', path),
 });

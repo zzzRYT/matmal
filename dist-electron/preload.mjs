@@ -23,5 +23,6 @@ electron.contextBridge.exposeInMainWorld("ipcRenderer", {
 });
 electron.contextBridge.exposeInMainWorld("api", {
   generate: (opts) => electron.ipcRenderer.invoke("generate", opts),
-  hanSpell: (opts) => electron.ipcRenderer.invoke("hanSpell-check", opts)
+  hanSpell: (opts) => electron.ipcRenderer.invoke("hanSpell-check", opts),
+  onNavigate: (path) => electron.ipcRenderer.invoke("navigate", path)
 });
