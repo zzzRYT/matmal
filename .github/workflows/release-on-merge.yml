@@ -1,0 +1,49 @@
+name: Release on Merge to main
+
+on:
+  pull_request:
+    types: [closed]
+
+jobs:
+  build-and-release:
+    if: ${{ github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'main' && github.actor != 'github-actions[bot]' }}
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Get package version
+        id: get_version
+        run: |
+          echo "VERSION=$(node -e \"console.log(require('./package.json').version)\")" >> $GITHUB_ENV
+
+      - name: Create tag for release (if missing) and push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          VERSION=$(node -e "console.log(require('./package.json').version)")
+          TAG="v${VERSION}"
+          echo "Preparing to create tag: $TAG"
+
+          # Ensure we have the remote refs
+          git fetch --prune --unshallow || true
+
+          # Check if tag already exists on origin
+          if git ls-remote --exit-code --tags origin "$TAG" >/dev/null 2>&1; then
+            echo "Tag $TAG already exists on origin — skipping tag creation."
+            exit 0
+          fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          echo "Creating annotated tag $TAG"
+          git tag -a "$TAG" -m "Release $TAG"
+
+          echo "Pushing tag $TAG to origin"
+          # Use token in remote URL to ensure push succeeds in GitHub Actions
+          git push "https://x-access-token:${GITHUB_TOKEN}@github.com/${{ github.repository }}" "$TAG"
