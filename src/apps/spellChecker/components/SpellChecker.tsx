@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef, useCallback } from 'react';
 import { useStore } from 'zustand';
 
 import { SpellCheckerApiResponse } from '../../../../electron/services/schema';
@@ -19,19 +19,31 @@ function SpellChecker({ inputText }: SpellChecker) {
   const [resultData, setResultData] = useState<SpellCheckerApiResponse | null>(
     null
   );
+  const [error, setError] = useState<Error | null>(null);
   const didMountRef = useRef(false);
 
-  const callGenerateSpell = async (sentence?: string) => {
-    const res = await window.api.generate({ sentence: sentence ?? spell });
-    setResultData(res as SpellCheckerApiResponse);
-    setSpell(inputText);
-  };
+  const callGenerateSpell = useCallback(
+    async (sentence?: string) => {
+      try {
+        const res = await window.api.generate({ sentence: sentence ?? spell });
+        setResultData(res as SpellCheckerApiResponse);
+        setSpell(inputText);
+      } catch (err) {
+        setError(err as Error);
+      }
+    },
+    [spell, inputText, setSpell]
+  );
 
   useEffect(() => {
     if (didMountRef.current) return;
     didMountRef.current = true;
     callGenerateSpell();
-  }, []);
+  }, [callGenerateSpell]);
+
+  if (error) {
+    throw error;
+  }
 
   return (
     <>

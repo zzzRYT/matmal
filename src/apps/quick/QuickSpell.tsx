@@ -4,7 +4,7 @@ import Button from '../../shared/components/ui/Button';
 import { useStore } from 'zustand';
 import { useSpellCheck } from '../../shared/stores/spell';
 import { handleClipboard } from '../spellChecker/utils';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useCallback } from 'react';
 import { SpellCheckerApiResponse } from '../../../electron/services/schema';
 
 function QuickSpell() {
@@ -12,26 +12,33 @@ function QuickSpell() {
   const [resultData, setResultData] = useState<SpellCheckerApiResponse | null>(
     null
   );
+  const [error, setError] = useState<Error | null>(null);
   const didMountRef = useRef(false);
 
-  const callGenerateSpell = async (sentence: string) => {
-    const resultData = await window.api.generate({ sentence });
-    setResultData(resultData);
-    setSpell(sentence);
-  };
+  const callGenerateSpell = useCallback(
+    async (sentence: string) => {
+      try {
+        const resultData = await window.api.generate({ sentence });
+        setResultData(resultData);
+        setSpell(sentence);
+      } catch (err) {
+        setError(err as Error);
+      }
+    },
+    [setSpell]
+  );
 
   useEffect(() => {
     if (didMountRef.current) return;
     didMountRef.current = true;
-    window.ipcRenderer.on('quick-selection', (_event, text) => {
+    const handleQuickSelection = (_event: unknown, text: string) => {
       callGenerateSpell(text);
-    });
-    return () => {
-      window.ipcRenderer.off('quick-selection', (_event, text) => {
-        callGenerateSpell(text);
-      });
     };
-  }, []);
+    window.ipcRenderer.on('quick-selection', handleQuickSelection);
+    return () => {
+      window.ipcRenderer.off('quick-selection', handleQuickSelection);
+    };
+  }, [callGenerateSpell]);
 
   const handleNewCheck = () => {
     setSpell('');
@@ -41,6 +48,10 @@ function QuickSpell() {
   const handleDetailInfo = () => {
     window.api.onNavigate('/result');
   };
+
+  if (error) {
+    throw error;
+  }
 
   return (
     <div className="p-4 flex flex-col h-screen">
