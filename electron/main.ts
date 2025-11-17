@@ -3,12 +3,11 @@ import { fileURLToPath } from 'node:url';
 import { app, globalShortcut, ipcMain, BrowserWindow } from 'electron';
 
 import { createMainWindow as makeMainWindow } from './windows/mainWindow';
-import { quickWin } from './windows/quickWindow';
-import { createQuickWindow } from './windows/quickWindow';
 import { handleGeminiGenerate } from './controller/gemini';
 import { handleHanSpellCheck } from './controller/hanSpell';
 import { handleNavigate } from './controller/navigate';
 import { PRELOAD_PATH } from './paths';
+import { handleCopyText } from './controller/copy';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -43,11 +42,7 @@ app.whenReady().then(() => {
 
   makeMainWindow(RENDERER_DIST, VITE_DEV_SERVER_URL, PRELOAD_PATH);
 
-  globalShortcut.register('CommandOrControl+Shift+D', () => {
-    createQuickWindow(RENDERER_DIST, VITE_DEV_SERVER_URL, PRELOAD_PATH);
-    quickWin?.show();
-    quickWin?.focus();
-  });
+  globalShortcut.register('CommandOrControl+Shift+D', handleCopyText);
 });
 
 app.on('will-quit', () => {

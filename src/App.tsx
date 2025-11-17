@@ -1,9 +1,15 @@
+import { useEffect } from 'react';
 import { Outlet } from 'react-router-dom';
 import Header from './shared/components/layout/Header';
 import Footer from './shared/components/layout/Footer';
 import { ToastContainer } from 'react-toastify';
+import { useSpellCheck } from './shared/stores/spell';
 
 function App() {
+  useEffect(() => {
+    useSpellCheck.getState().setSpell('');
+  }, []);
+
   return (
     <>
       <div className="w-full flex flex-col bg-gray-50 h-screen">

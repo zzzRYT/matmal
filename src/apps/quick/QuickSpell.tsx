@@ -23,9 +23,14 @@ function QuickSpell() {
   useEffect(() => {
     if (didMountRef.current) return;
     didMountRef.current = true;
-    callGenerateSpell(
-      '나는 오늘 아침에 밥을 먹고 학교를 갔다왔어요. 그 사람은 나보다 키가 더 작치만 운동을 잘해요.어제 친구들이랑 영화를 봤는데, 진짜 재미있었어여.'
-    );
+    window.ipcRenderer.on('quick-selection', (_event, text) => {
+      callGenerateSpell(text);
+    });
+    return () => {
+      window.ipcRenderer.off('quick-selection', (_event, text) => {
+        callGenerateSpell(text);
+      });
+    };
   }, []);
 
   const handleNewCheck = () => {
