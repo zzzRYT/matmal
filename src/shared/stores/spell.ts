@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { persist, createJSONStorage } from 'zustand/middleware';
+import { persist } from 'zustand/middleware';
 
 type SpellState = {
   spell: string;
@@ -31,7 +31,6 @@ export const useSpellCheck = create<SpellState>()(
     }),
     {
       name: 'spell',
-      storage: createJSONStorage(() => sessionStorage),
     }
   )
 );

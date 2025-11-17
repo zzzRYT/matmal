@@ -3,13 +3,13 @@ import { fileURLToPath } from 'node:url';
 import { app, globalShortcut, ipcMain, BrowserWindow } from 'electron';
 
 import { createMainWindow as makeMainWindow } from './windows/mainWindow';
-import { quickWin } from './windows/quickWindow';
-import { createQuickWindow } from './windows/quickWindow';
 import { handleGeminiGenerate } from './controller/gemini';
 import { handleHanSpellCheck } from './controller/hanSpell';
+import { handleNavigate } from './controller/navigate';
+import { PRELOAD_PATH } from './paths';
+import { handleCopyText } from './controller/copy';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const preloadPath = path.join(__dirname, 'preload.mjs');
 
 process.env.APP_ROOT = path.join(__dirname, '..');
 
@@ -30,7 +30,7 @@ app.on('window-all-closed', () => {
 
 app.on('activate', () => {
   if (BrowserWindow.getAllWindows().length === 0) {
-    makeMainWindow(RENDERER_DIST, VITE_DEV_SERVER_URL, preloadPath);
+    makeMainWindow(RENDERER_DIST, VITE_DEV_SERVER_URL, PRELOAD_PATH);
   }
 });
 
@@ -38,13 +38,11 @@ app.whenReady().then(() => {
   ipcMain.handle('generate', handleGeminiGenerate);
   ipcMain.handle('hanSpell-check', handleHanSpellCheck);
 
-  makeMainWindow(RENDERER_DIST, VITE_DEV_SERVER_URL, preloadPath);
+  ipcMain.handle('navigate', handleNavigate);
 
-  globalShortcut.register('CommandOrControl+Shift+D', () => {
-    createQuickWindow(RENDERER_DIST, VITE_DEV_SERVER_URL, preloadPath);
-    quickWin?.show();
-    quickWin?.focus();
-  });
+  makeMainWindow(RENDERER_DIST, VITE_DEV_SERVER_URL, PRELOAD_PATH);
+
+  globalShortcut.register('CommandOrControl+Shift+D', handleCopyText);
 });
 
 app.on('will-quit', () => {
@@ -52,6 +50,7 @@ app.on('will-quit', () => {
   try {
     ipcMain.removeHandler('generate');
     ipcMain.removeHandler('hanSpell-check');
+    ipcMain.removeHandler('navigate');
   } catch (e) {
     console.error('electron quit error');
   }
