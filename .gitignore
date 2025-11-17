@@ -28,3 +28,5 @@ dist-electron
 .env
 .env.local
 .env.*
+
+out/
