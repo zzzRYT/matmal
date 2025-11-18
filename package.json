@@ -22,7 +22,7 @@
     "forge": {
       "packagerConfig": {
         "asar": true,
-        "icons": "./src/assets/matmal-icon",
+        "icons": "./public/matmal-icon.png",
         "name": "matmal",
         "packagedName": "matmal",
         "executableName": "matmal"
@@ -119,6 +119,7 @@
     "@typescript-eslint/parser": "^7.1.1",
     "@vitejs/plugin-react": "^4.2.1",
     "electron": "^30.0.1",
+    "electron-builder": "^26.0.12",
     "eslint": "^8.57.0",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.5",
