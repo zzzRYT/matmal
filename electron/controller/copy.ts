@@ -21,8 +21,10 @@ export const handleCopyText = async () => {
         quickWin.webContents.send('quick-selection', selectedText);
       }
     }
-    quickWin?.show();
-    quickWin?.focus();
+    quickWin?.on('ready-to-show', () => {
+      quickWin?.show();
+      quickWin?.focus();
+    });
   } catch (error) {
     console.log(error);
     dialog.showErrorBox(

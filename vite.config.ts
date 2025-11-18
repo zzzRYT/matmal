@@ -6,6 +6,7 @@ import tailwindcss from '@tailwindcss/vite';
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  base: process.env.VITE_DEV_SERVER_URL ? '/' : './',
   plugins: [
     tailwindcss(),
     react(),

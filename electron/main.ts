@@ -2,7 +2,10 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { app, globalShortcut, ipcMain, BrowserWindow } from 'electron';
 
-import { createMainWindow as makeMainWindow } from './windows/mainWindow';
+import {
+  mainWin,
+  createMainWindow as makeMainWindow,
+} from './windows/mainWindow';
 import { handleGeminiGenerate } from './controller/gemini';
 import { handleHanSpellCheck } from './controller/hanSpell';
 import { handleNavigate } from './controller/navigate';
@@ -31,6 +34,10 @@ app.on('window-all-closed', () => {
 app.on('activate', () => {
   if (BrowserWindow.getAllWindows().length === 0) {
     makeMainWindow(RENDERER_DIST, VITE_DEV_SERVER_URL, PRELOAD_PATH);
+    mainWin?.on('ready-to-show', () => {
+      mainWin?.show();
+      mainWin?.focus();
+    });
   }
 });
 
@@ -41,6 +48,10 @@ app.whenReady().then(() => {
   ipcMain.handle('navigate', handleNavigate);
 
   makeMainWindow(RENDERER_DIST, VITE_DEV_SERVER_URL, PRELOAD_PATH);
+  mainWin?.on('ready-to-show', () => {
+    mainWin?.show();
+    mainWin?.focus();
+  });
 
   globalShortcut.register('CommandOrControl+Shift+D', handleCopyText);
 });
