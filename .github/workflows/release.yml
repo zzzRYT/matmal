@@ -23,4 +23,4 @@ jobs:
       - name: Publish Electron Forge App
         env:
           ELECTRON_FORGE_PUBLISHER_GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
-        run: npm run publishf
+        run: npm run publish
