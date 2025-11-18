@@ -88,6 +88,7 @@
       "target": "nsis"
     }
   },
+  "license": "MIT",
   "dependencies": {
     "@google/genai": "^1.29.0",
     "@tailwindcss/vite": "^4.1.17",
