@@ -28,7 +28,8 @@ export function createQuickWindow(
   });
 
   if (VITE_DEV_SERVER_URL) {
-    quickWin.loadURL(`${VITE_DEV_SERVER_URL}quick`);
+    const target = `${VITE_DEV_SERVER_URL.replace(/\/$/, '')}/#${'/quick'}`;
+    quickWin.loadURL(target);
   } else {
     quickWin.loadFile(path.join(RENDERER_DIST, 'index.html'));
     quickWin.webContents.once('did-finish-load', () => {
