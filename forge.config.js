@@ -5,7 +5,7 @@ export default {
   packagerConfig: {
     asar: true,
     icons: './src/assets/matmal-icon',
-    executableName: 'MATMAL',
+    executableName: 'matmal',
     name: 'MATMAL',
   },
   rebuildConfig: {},
@@ -20,19 +20,11 @@ export default {
     },
     {
       name: '@electron-forge/maker-deb',
-      config: {
-        options: {
-          executable: 'MATMAL',
-        },
-      },
+      config: {},
     },
     {
       name: '@electron-forge/maker-rpm',
-      config: {
-        options: {
-          executable: 'MATMAL',
-        },
-      },
+      config: {},
     },
   ],
   publishers: [

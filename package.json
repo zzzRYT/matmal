@@ -23,15 +23,17 @@
       "packagerConfig": {
         "asar": true,
         "icons": "./src/assets/matmal-icon",
-        "executableName": "MATMAL",
-        "name": "MATMAL"
+        "name": "MATMAL",
+        "executableName": "matmal"
       },
       "makers": [
         {
           "name": "@electron-forge/maker-squirrel",
           "config": {
             "options": {
-              "executableName": "MATMAL"
+              "icon": "./src/assets/matmal-icon.ico",
+              "name": "matmal",
+              "productName": "matmal"
             }
           }
         },
@@ -43,19 +45,11 @@
         },
         {
           "name": "@electron-forge/maker-deb",
-          "config": {
-            "options": {
-              "executableName": "MATMAL"
-            }
-          }
+          "config": {}
         },
         {
           "name": "@electron-forge/maker-rpm",
-          "config": {
-            "options": {
-              "executableName": "MATMAL"
-            }
-          }
+          "config": {}
         }
       ]
     },
