@@ -23,7 +23,8 @@
       "packagerConfig": {
         "asar": true,
         "icons": "./src/assets/matmal-icon",
-        "name": "MATMAL",
+        "name": "matmal",
+        "packagedName": "matmal",
         "executableName": "matmal"
       },
       "makers": [
@@ -45,11 +46,23 @@
         },
         {
           "name": "@electron-forge/maker-deb",
-          "config": {}
+          "config": {
+            "options": {
+              "icon": "./src/assets/matmal-icon.ico",
+              "name": "matmal",
+              "productName": "matmal"
+            }
+          }
         },
         {
           "name": "@electron-forge/maker-rpm",
-          "config": {}
+          "config": {
+            "options": {
+              "icon": "./src/assets/matmal-icon.ico",
+              "name": "matmal",
+              "productName": "matmal"
+            }
+          }
         }
       ]
     },
