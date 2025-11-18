@@ -73,7 +73,7 @@
         "name": "@electron-forge/publisher-github",
         "config": {
           "repository": {
-            "owner": "zzzryt",
+            "owner": "zzzRYT",
             "name": "matmal"
           },
           "prerelease": false,
