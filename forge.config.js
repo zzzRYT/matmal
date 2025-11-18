@@ -5,6 +5,8 @@ export default {
   packagerConfig: {
     asar: true,
     icons: './src/assets/matmal-icon',
+    executableName: 'MATMAL',
+    name: 'MATMAL',
   },
   rebuildConfig: {},
   makers: [
