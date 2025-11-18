@@ -3,9 +3,9 @@ import "node:fs";
 import "node:url";
 import "electron";
 import "module";
-import { M as i, R as _, V as D } from "./main-DeBYK73s.js";
+import { M, R, V } from "./main-ygaM4XTv.js";
 export {
-  i as MAIN_DIST,
-  _ as RENDERER_DIST,
-  D as VITE_DEV_SERVER_URL
+  M as MAIN_DIST,
+  R as RENDERER_DIST,
+  V as VITE_DEV_SERVER_URL
 };

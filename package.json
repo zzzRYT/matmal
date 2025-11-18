@@ -2,7 +2,7 @@
   "name": "matmal-electron-app",
   "private": true,
   "version": "0.0.1",
-  "productName": "MATMAL",
+  "productName": "matmal",
   "description": "간편한 한국어 맞춤법 검사 데스크탑 앱",
   "author": "zzzryt <jinjinstar3@gmail.com>",
   "type": "module",
@@ -48,7 +48,7 @@
           "name": "@electron-forge/maker-deb",
           "config": {
             "options": {
-              "icon": "./src/assets/matmal-icon.ico",
+              "icon": "./public/matmal-icon.png",
               "name": "matmal",
               "productName": "matmal"
             }
@@ -58,7 +58,7 @@
           "name": "@electron-forge/maker-rpm",
           "config": {
             "options": {
-              "icon": "./src/assets/matmal-icon.ico",
+              "icon": "./public/matmal-icon.png",
               "name": "matmal",
               "productName": "matmal"
             }

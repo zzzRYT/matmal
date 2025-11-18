@@ -35,7 +35,11 @@ export function createMainWindow(
   if (VITE_DEV_SERVER_URL) {
     mainWin.loadURL(VITE_DEV_SERVER_URL);
   } else {
-    mainWin.loadFile(path.join(RENDERER_DIST, 'index.html'));
+    const indexHtml = path.join(RENDERER_DIST, 'index.html');
+
+    mainWin.loadFile(indexHtml).catch((e) => {
+      console.error('Failed to load index.html:', e);
+    });
   }
 
   return mainWin;
