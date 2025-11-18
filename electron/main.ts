@@ -52,7 +52,6 @@ if (_envPath) {
   console.warn('[main] No .env found in any candidate path.');
 }
 
-// 🚧 Use ['ENV_NAME'] avoid vite:define plugin - Vite@2.x
 export const VITE_DEV_SERVER_URL = process.env['VITE_DEV_SERVER_URL'];
 export const MAIN_DIST = path.join(process.env.APP_ROOT, 'dist-electron');
 export const RENDERER_DIST = path.join(process.env.APP_ROOT, 'dist');
