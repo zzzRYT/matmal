@@ -7,7 +7,10 @@ on:
 
 jobs:
   release:
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
 
     steps:
       - uses: actions/checkout@v3
@@ -20,7 +23,10 @@ jobs:
       - name: Install dependencies
         run: npm install
 
+      - name: Build application
+        run: npm run build
+
       - name: Publish Electron Forge App
         env:
-          ELECTRON_FORGE_PUBLISHER_GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
         run: npm run publish
