@@ -1,17 +1,20 @@
-import dotenv from 'dotenv';
-
 import { GoogleGenAI } from '@google/genai';
 import { getSpellCheckPrompt } from './promptHelper';
 import { SpellCheckerApiResponse } from '../schema';
 
-dotenv.config();
+let ai: ReturnType<typeof createAi> | null = null;
 
-const ai = new GoogleGenAI({
-  apiKey: process.env.GEMINI_API_KEY,
-});
+function createAi() {
+  return new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+}
+
+function getAi() {
+  if (!ai) ai = createAi();
+  return ai;
+}
 
 export async function geminiGenerate(contents: string) {
-  const response = await ai.models.generateContent({
+  const response = await getAi().models.generateContent({
     model: 'gemini-2.5-flash-lite',
     contents,
   });

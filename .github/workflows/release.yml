@@ -1,0 +1,26 @@
+name: Build & Publish Electron App
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Publish Electron Forge App
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+        run: npm run publish

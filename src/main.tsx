@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { HashRouter, Route, Routes } from 'react-router-dom';
 import { ErrorBoundary } from 'react-error-boundary';
 
 import App from './App.tsx';
@@ -13,7 +13,7 @@ import ErrorFallback from './shared/components/ErrorFallback.tsx';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <BrowserRouter>
+    <HashRouter>
       <ErrorBoundary FallbackComponent={ErrorFallback}>
         <Routes>
           <Route path="/" element={<App />}>
@@ -23,13 +23,13 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
           <Route path="/quick" element={<QuickSpellPage />}></Route>
         </Routes>
       </ErrorBoundary>
-    </BrowserRouter>
+    </HashRouter>
   </React.StrictMode>
 );
 
 window.ipcRenderer.on('navigate-to', (_event, path: string) => {
   try {
-    window.location.pathname = path;
+    window.location.hash = `#${path}`;
   } catch (err) {
     console.warn('navigate-to failed', err);
   }
