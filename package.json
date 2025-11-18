@@ -21,7 +21,10 @@
   "config": {
     "forge": {
       "packagerConfig": {
-        "executableName": "MATMAL"
+        "asar": true,
+        "icons": "./src/assets/matmal-icon",
+        "executableName": "MATMAL",
+        "name": "MATMAL"
       },
       "makers": [
         {
@@ -57,6 +60,12 @@
         }
       }
     ]
+  },
+  "build": {
+    "appId": "com.zzzryt.matmal",
+    "win": {
+      "target": "nsis"
+    }
   },
   "dependencies": {
     "@google/genai": "^1.29.0",
