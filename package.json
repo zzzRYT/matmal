@@ -29,7 +29,11 @@
       "makers": [
         {
           "name": "@electron-forge/maker-squirrel",
-          "config": {}
+          "config": {
+            "options": {
+              "executableName": "MATMAL"
+            }
+          }
         },
         {
           "name": "@electron-forge/maker-zip",
@@ -39,11 +43,19 @@
         },
         {
           "name": "@electron-forge/maker-deb",
-          "config": {}
+          "config": {
+            "options": {
+              "executableName": "MATMAL"
+            }
+          }
         },
         {
           "name": "@electron-forge/maker-rpm",
-          "config": {}
+          "config": {
+            "options": {
+              "executableName": "MATMAL"
+            }
+          }
         }
       ]
     },
