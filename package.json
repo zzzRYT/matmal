@@ -20,7 +20,9 @@
   },
   "config": {
     "forge": {
-      "packagerConfig": {},
+      "packagerConfig": {
+        "executableName": "MATMAL"
+      },
       "makers": [
         {
           "name": "@electron-forge/maker-squirrel",
