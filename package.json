@@ -16,7 +16,7 @@
     "make": "electron-forge make",
     "publish": "electron-forge publish",
     "format": "prettier --write \"**/*.{ts,tsx,js,jsx,cjs,json,json5,css,md,html,yml,yaml}\"",
-    "format:check": "prettier --check \"**/*.{ts,tsx,js,jsx,cjs,json,json5,css,md,html,yml,yaml}\""
+    "format:check": "prettier --check ."
   },
   "config": {
     "forge": {
