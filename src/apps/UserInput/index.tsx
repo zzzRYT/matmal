@@ -20,9 +20,7 @@ function UserInput() {
   return (
     <div>
       <div className="mb-4">
-        <label className="block text-sm font-medium text-gray-700 mb-2">
-          검사할 텍스트
-        </label>
+        <label className="block text-sm font-medium text-gray-700 mb-2">검사할 텍스트</label>
         <textarea
           className="w-full min-h-100 border rounded p-3 resize-y"
           value={spell}

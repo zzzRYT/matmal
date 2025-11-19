@@ -52,9 +52,7 @@ function HighlightSpelling({
       return (
         <>
           {parts.map((part, index) => {
-            const matchedKey = queries.find(
-              (word) => word.toLowerCase() === part.toLowerCase()
-            );
+            const matchedKey = queries.find((word) => word.toLowerCase() === part.toLowerCase());
 
             if (matchedKey && errorMap[matchedKey]) {
               const candWord = errorMap[matchedKey];
@@ -68,9 +66,7 @@ function HighlightSpelling({
                 >
                   <button
                     type="button"
-                    onClick={() =>
-                      replaceOccurrence(matchedKey, candWord, occurrence)
-                    }
+                    onClick={() => replaceOccurrence(matchedKey, candWord, occurrence)}
                     className="absolute top-0 left-0 w-max text-xs text-blue-600 font-semibold bg-white border border-blue-300 rounded px-1 shadow-sm whitespace-nowrap cursor-pointer"
                   >
                     {candWord}
@@ -89,9 +85,7 @@ function HighlightSpelling({
   );
 
   return (
-    <div className={`leading-relaxed ${className}`}>
-      {highlight(originWords ?? '', tokens)}
-    </div>
+    <div className={`leading-relaxed ${className}`}>{highlight(originWords ?? '', tokens)}</div>
   );
 }
 

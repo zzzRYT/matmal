@@ -16,9 +16,7 @@ interface SpellChecker {
 
 function SpellChecker({ inputText }: SpellChecker) {
   const { spell, setSpell } = useStore(useSpellCheck);
-  const [resultData, setResultData] = useState<SpellCheckerApiResponse | null>(
-    null
-  );
+  const [resultData, setResultData] = useState<SpellCheckerApiResponse | null>(null);
   const [error, setError] = useState<Error | null>(null);
   const didMountRef = useRef(false);
 
@@ -52,10 +50,7 @@ function SpellChecker({ inputText }: SpellChecker) {
           <h2 className="text-lg font-medium mb-2">맞춤법 검사 입력</h2>
           <div className="flex-1 overflow-auto">
             {resultData ? (
-              <HighlightSpelling
-                originWords={spell}
-                errorWordsData={resultData}
-              />
+              <HighlightSpelling originWords={spell} errorWordsData={resultData} />
             ) : (
               <div>검사중...</div>
             )}
@@ -69,15 +64,10 @@ function SpellChecker({ inputText }: SpellChecker) {
           <h2 className="text-lg font-medium mb-2">결과</h2>
           <div className="overflow-auto space-y-3 flex-1 min-h-0">
             {(() => {
-              if (!resultData)
-                return (
-                  <p className="text-gray-500">결과가 여기에 표시됩니다.</p>
-                );
+              if (!resultData) return <p className="text-gray-500">결과가 여기에 표시됩니다.</p>;
               const raw = resultData.PnuErrorWordList?.PnuErrorWord;
               if (raw.length === 0)
-                return (
-                  <p className="text-gray-500">결과가 여기에 표시됩니다.</p>
-                );
+                return <p className="text-gray-500">결과가 여기에 표시됩니다.</p>;
               return raw.map((word, idx) => {
                 const currentWord = getCandWord(word);
                 if (currentWord !== word.OrgStr) {

@@ -9,9 +9,7 @@ import { SpellCheckerApiResponse } from '../../../electron/services/schema';
 
 function QuickSpell() {
   const { spell, setSpell } = useStore(useSpellCheck);
-  const [resultData, setResultData] = useState<SpellCheckerApiResponse | null>(
-    null
-  );
+  const [resultData, setResultData] = useState<SpellCheckerApiResponse | null>(null);
   const [error, setError] = useState<Error | null>(null);
   const didMountRef = useRef(false);
 

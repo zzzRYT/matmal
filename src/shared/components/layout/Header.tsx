@@ -9,12 +9,7 @@ function Header() {
         <div className="text-lg font-semibold">Matmal</div>
         <div>
           <button aria-label="열기" className="p-2 rounded hover:bg-gray-700">
-            <svg
-              className="w-6 h-6"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
+            <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"
