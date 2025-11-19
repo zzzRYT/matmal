@@ -17,6 +17,11 @@ export default defineConfig({
               external: ['bufferutil', 'utf-8-validate'],
             },
           },
+          define: {
+            'process.env.GEMINI_API_KEY': JSON.stringify(
+              process.env.GEMINI_API_KEY,
+            ),
+          },
         },
       },
       preload: {
