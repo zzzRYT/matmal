@@ -26,9 +26,7 @@ export async function hanSpellCheck({
   });
   if (!response.ok) {
     const text = await response.text().catch(() => '');
-    throw new Error(
-      `HanSpell API error: ${response.status} ${response.statusText} ${text}`
-    );
+    throw new Error(`HanSpell API error: ${response.status} ${response.statusText} ${text}`);
   }
   const xml = await response.text();
   const parser = new XMLParser();

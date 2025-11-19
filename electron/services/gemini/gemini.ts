@@ -30,9 +30,7 @@ export async function geminiGenerate(contents: string) {
   }
 }
 
-export async function checkSpelling(
-  text: string
-): Promise<SpellCheckerApiResponse | null> {
+export async function checkSpelling(text: string): Promise<SpellCheckerApiResponse | null> {
   const prompt = getSpellCheckPrompt(text);
 
   try {
@@ -42,9 +40,7 @@ export async function checkSpelling(
     const firstBrace = raw.indexOf('{');
     const lastBrace = raw.lastIndexOf('}');
     const candidate =
-      firstBrace !== -1 && lastBrace !== -1
-        ? raw.slice(firstBrace, lastBrace + 1)
-        : raw;
+      firstBrace !== -1 && lastBrace !== -1 ? raw.slice(firstBrace, lastBrace + 1) : raw;
 
     const resultObject = JSON.parse(candidate);
     if (!resultObject) {

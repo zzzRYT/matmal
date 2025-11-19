@@ -24,8 +24,7 @@ export const useSpellCheck = create<SpellState>()(
           fromIndex = idx + from.length;
         }
 
-        const newText =
-          source.slice(0, idx) + to + source.slice(idx + from.length);
+        const newText = source.slice(0, idx) + to + source.slice(idx + from.length);
         set({ spell: newText });
       },
     }),

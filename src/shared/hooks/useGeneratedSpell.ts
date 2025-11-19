@@ -5,9 +5,7 @@ import { SpellCheckerApiResponse } from '../../../electron/services/schema';
 
 export const useGeneratedSpell = ({ sentence }: { sentence: string }) => {
   const { setSpell } = useStore(useSpellCheck);
-  const [resultData, setResultData] = useState<SpellCheckerApiResponse | null>(
-    null
-  );
+  const [resultData, setResultData] = useState<SpellCheckerApiResponse | null>(null);
   const didMountRef = useRef(false);
 
   const callGenerateSpell = useCallback(async () => {

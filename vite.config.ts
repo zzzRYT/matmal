@@ -18,9 +18,7 @@ export default defineConfig({
             },
           },
           define: {
-            'process.env.GEMINI_API_KEY': JSON.stringify(
-              process.env.GEMINI_API_KEY,
-            ),
+            'process.env.GEMINI_API_KEY': JSON.stringify(process.env.GEMINI_API_KEY),
           },
         },
       },

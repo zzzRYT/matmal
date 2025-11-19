@@ -10,10 +10,7 @@ export function createMainWindow(
   preloadPath?: string
 ) {
   mainWin = new BrowserWindow({
-    icon: path.join(
-      process.env.VITE_PUBLIC ?? RENDERER_DIST,
-      'electron-vite.svg'
-    ),
+    icon: path.join(process.env.VITE_PUBLIC ?? RENDERER_DIST, 'electron-vite.svg'),
     webPreferences: {
       preload: preloadPath ?? path.join(RENDERER_DIST, 'preload.mjs'),
     },
@@ -22,10 +19,7 @@ export function createMainWindow(
   });
 
   mainWin.webContents.on('did-finish-load', () => {
-    mainWin?.webContents.send(
-      'main-process-message',
-      new Date().toLocaleString()
-    );
+    mainWin?.webContents.send('main-process-message', new Date().toLocaleString());
   });
 
   mainWin.on('closed', () => {
