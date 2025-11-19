@@ -14,20 +14,44 @@ function getAi() {
 }
 
 export async function geminiGenerate(contents: string) {
-  const response = await getAi().models.generateContent({
-    model: 'gemini-2.5-flash-lite',
-    contents,
-  });
+  const models = [
+    'gemini-2.5-flash-lite',
+    'gemini-2.5-flash',
+    'gemini-2.0-flash',
+    'gemini-2.0-flash-lite',
+  ];
 
-  if (!response) return '';
-  if (typeof response === 'string') return response;
-  const maybeText = (response as { text?: unknown }).text;
-  if (typeof maybeText === 'string') return maybeText;
-  try {
-    return JSON.stringify(response);
-  } catch (err) {
-    return String(response);
+  let lastError: unknown = null;
+
+  for (const model of models) {
+    try {
+      const response = await getAi().models.generateContent({
+        model,
+        contents,
+      });
+
+      if (!response) return '';
+      if (typeof response === 'string') return response;
+      const maybeText = (response as { text?: unknown }).text;
+      if (typeof maybeText === 'string') return maybeText;
+      try {
+        return JSON.stringify(response);
+      } catch (err) {
+        return String(response);
+      }
+    } catch (error) {
+      lastError = error;
+      if (error instanceof Error && /503/.test(error.message)) {
+        console.warn(`Model ${model} failed with 503 error. Trying next model.`);
+      } else {
+        console.error(`Gemini model ${model} failed with a non-retryable error.`, error);
+        throw error;
+      }
+    }
   }
+
+  console.error('All Gemini models failed.', lastError);
+  throw new Error('All Gemini models failed to generate content.');
 }
 
 export async function checkSpelling(text: string): Promise<SpellCheckerApiResponse | null> {
