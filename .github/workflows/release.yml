@@ -2,8 +2,8 @@ name: Build & Publish Electron App
 
 on:
   push:
-    tags:
-      - 'v*.*.*'
+    branches:
+      - main
 
 jobs:
   release:
@@ -30,5 +30,5 @@ jobs:
 
       - name: Publish Electron Forge App
         env:
-          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: npm run publish
