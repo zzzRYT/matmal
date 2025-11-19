@@ -15,10 +15,7 @@ function SpellHelper({ checkWord }: SpellHelperProps) {
 
       <section className="mb-3">
         <h4 className="text-sm font-medium mb-2">대치어</h4>
-        <Instead
-          instead={checkWord?.CandWordList}
-          original={checkWord.OrgStr}
-        />
+        <Instead instead={checkWord?.CandWordList} original={checkWord.OrgStr} />
       </section>
 
       <section>

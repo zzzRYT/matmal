@@ -5,10 +5,7 @@ import { app, globalShortcut, ipcMain, BrowserWindow } from 'electron';
 import { createRequire } from 'module';
 import dotenv from 'dotenv';
 
-import {
-  mainWin,
-  createMainWindow as makeMainWindow,
-} from './windows/mainWindow';
+import { mainWin, createMainWindow as makeMainWindow } from './windows/mainWindow';
 import { handleGeminiGenerate } from './controller/gemini';
 import { handleHanSpellCheck } from './controller/hanSpell';
 import { handleNavigate } from './controller/navigate';

@@ -6,8 +6,7 @@ export interface SpellCheckerRequestBody {
   sentence: string;
 }
 
-export type SpellCheckerRequest = SpellCheckerRequestBody &
-  Partial<SpellCheckerParams>;
+export type SpellCheckerRequest = SpellCheckerRequestBody & Partial<SpellCheckerParams>;
 
 export type CandWord = {
   CandWord: string | string[];

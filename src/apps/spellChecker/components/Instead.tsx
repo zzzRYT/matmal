@@ -23,9 +23,7 @@ function Instead({ instead, original }: InsteadProps) {
     return (
       <button
         type="button"
-        onClick={() =>
-          replaceOccurrence(original ?? '', String(instead.CandWord), 1)
-        }
+        onClick={() => replaceOccurrence(original ?? '', String(instead.CandWord), 1)}
         className={highlightBox}
       >
         {instead.CandWord}
