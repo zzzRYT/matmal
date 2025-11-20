@@ -25,9 +25,10 @@ export const handleCopyText = async () => {
     quickWin?.focus();
   } catch (error) {
     console.log(error);
-    dialog.showErrorBox(
-      '오류',
-      '텍스트를 가져오는 데 실패했습니다. 앱에 "손쉬운 사용" 권한이 부여되었는지 확인해주세요.'
-    );
+    const errorMessage =
+      process.platform === 'darwin'
+        ? '텍스트를 가져오는 데 실패했습니다. 앱에 "손쉬운 사용" 권한이 부여되었는지 확인해주세요.'
+        : '텍스트를 가져오는 데 실패했습니다.';
+    dialog.showErrorBox('오류', errorMessage);
   }
 };

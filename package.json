@@ -100,6 +100,7 @@
     "react-error-boundary": "^6.0.0",
     "react-router-dom": "^7.9.5",
     "react-toastify": "^11.0.5",
+    "robotjs": "^0.6.0",
     "tailwindcss": "^4.1.17",
     "zustand": "^5.0.8"
   },
@@ -124,11 +125,11 @@
     "eslint": "^8.57.0",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.5",
+    "prettier": "^2.8.8",
     "typescript": "^5.2.2",
     "vite": "^5.1.6",
     "vite-plugin-electron": "^0.28.6",
-    "vite-plugin-electron-renderer": "^0.14.5",
-    "prettier": "^2.8.8"
+    "vite-plugin-electron-renderer": "^0.14.5"
   },
   "main": "dist-electron/main.js"
 }
