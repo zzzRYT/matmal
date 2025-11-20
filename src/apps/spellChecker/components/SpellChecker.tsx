@@ -15,7 +15,7 @@ interface SpellChecker {
 }
 
 function SpellChecker({ inputText }: SpellChecker) {
-  const { spell, setSpell } = useStore(useSpellCheck);
+  const { spell, setSpell, undo } = useStore(useSpellCheck);
   const [resultData, setResultData] = useState<SpellCheckerApiResponse | null>(null);
   const [error, setError] = useState<Error | null>(null);
   const didMountRef = useRef(false);
@@ -56,6 +56,7 @@ function SpellChecker({ inputText }: SpellChecker) {
             )}
           </div>
           <div className="flex justify-end gap-4">
+            <Button onClick={undo}>뒤로돌리기</Button>
             <Button onClick={() => handleClipboard(spell)}>Copy</Button>
           </div>
         </section>
