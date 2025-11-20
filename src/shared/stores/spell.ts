@@ -1,19 +1,31 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
-type SpellState = {
+type State = {
   spell: string;
-  setSpell: (sentence: string) => void;
-  replaceOccurrence: (from: string, to: string, occurrence?: number) => void;
+  history: string[];
+  currentIndex: number;
 };
 
-export const useSpellCheck = create<SpellState>()(
+type Actions = {
+  setSpell: (sentence: string) => void;
+  replaceOccurrence: (from: string, to: string, occurrence?: number) => void;
+  undo: () => void;
+};
+
+export const useSpellCheck = create<State & Actions>()(
   persist(
     (set, get) => ({
+      history: [],
+      currentIndex: -1,
       spell: '',
       setSpell: (sentence: string) => set({ spell: sentence }),
       replaceOccurrence: (from: string, to: string, occurrence = 1) => {
         const source = get().spell ?? '';
+        set({
+          history: [...get().history.slice(0, get().currentIndex + 1), source],
+          currentIndex: get().currentIndex + 1,
+        });
         if (!from) return;
 
         let idx = -1;
@@ -26,6 +38,15 @@ export const useSpellCheck = create<SpellState>()(
 
         const newText = source.slice(0, idx) + to + source.slice(idx + from.length);
         set({ spell: newText });
+      },
+      undo() {
+        const { history, currentIndex } = get();
+        if (currentIndex < 0) return;
+        const previousText = history[currentIndex];
+        set({
+          spell: previousText,
+          currentIndex: currentIndex - 1,
+        });
       },
     }),
     {
