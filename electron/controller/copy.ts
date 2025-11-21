@@ -1,4 +1,4 @@
-import { dialog } from 'electron';
+import { dialog, screen } from 'electron';
 
 import { createQuickWindow, quickWin } from '../windows/quickWindow';
 import { getSelectedText } from '../services/copy/selectedText';
@@ -12,12 +12,14 @@ export const handleCopyText = async () => {
     }
     const selectedText = await getSelectedText();
     if (selectedText && selectedText.trim().length > 0) {
+      const { x, y } = screen.getCursorScreenPoint();
       if (!quickWin || quickWin.isDestroyed()) {
-        createQuickWindow(RENDERER_DIST, VITE_DEV_SERVER_URL, PRELOAD_PATH);
+        createQuickWindow(RENDERER_DIST, VITE_DEV_SERVER_URL, PRELOAD_PATH, { x, y });
         quickWin!.webContents.once('did-finish-load', () => {
           quickWin?.webContents.send('quick-selection', selectedText);
         });
       } else {
+        quickWin.setPosition(x, y);
         quickWin.webContents.send('quick-selection', selectedText);
       }
     }

@@ -8,7 +8,7 @@ import { useEffect, useRef, useState, useCallback } from 'react';
 import { SpellCheckerApiResponse } from '../../../electron/services/schema';
 
 function QuickSpell() {
-  const { spell, setSpell } = useStore(useSpellCheck);
+  const { spell, setSpell, clearSpell } = useStore(useSpellCheck);
   const [resultData, setResultData] = useState<SpellCheckerApiResponse | null>(null);
   const [error, setError] = useState<Error | null>(null);
   const didMountRef = useRef(false);
@@ -39,7 +39,7 @@ function QuickSpell() {
   }, [callGenerateSpell]);
 
   const handleNewCheck = () => {
-    setSpell('');
+    clearSpell();
     window.api.onNavigate('/');
   };
 
@@ -53,7 +53,7 @@ function QuickSpell() {
 
   return (
     <div className="p-4 flex flex-col h-screen">
-      <div className="flex gap-4">
+      <div className="flex gap-4 [-webkit-app-region:drag]">
         <span className="text-xs text-gray-500">텍스트 수: {spell.length}</span>
       </div>
       <div className="flex-1 overflow-y-auto border border-gray-500 rounded-lg p-1 my-2">
