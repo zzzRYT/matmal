@@ -95,6 +95,10 @@ app.whenReady().then(() => {
     nativeTheme.themeSource = mode;
   });
 
+  ipcMain.handle('get-app-version', () => {
+    return app.getVersion();
+  });
+
   ipcMain.handle('setting-open', () => {
     createSettingWindow();
     settingWin?.on('ready-to-show', () => {
