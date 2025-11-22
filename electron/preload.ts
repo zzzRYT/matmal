@@ -5,7 +5,7 @@ declare global {
   interface Window {
     api: {
       generate: (opts: { sentence: string }) => Promise<SpellCheckerApiResponse>;
-      hanSpell: (opts: { sentence:string; weakOpt?: number }) => Promise<SpellCheckerApiResponse>;
+      hanSpell: (opts: { sentence: string; weakOpt?: number }) => Promise<SpellCheckerApiResponse>;
       onNavigate: (path: string) => Promise<void>;
       openSetting: () => Promise<void>;
       getAppVersion: () => Promise<string>;
