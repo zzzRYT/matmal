@@ -7,7 +7,7 @@ interface SpellHelperProps {
 
 function SpellHelper({ checkWord }: SpellHelperProps) {
   return (
-    <article className="w-full p-4 border rounded bg-white">
+    <article className="w-full p-4 border rounded">
       <header className="mb-3">
         <h3 className="text-sm font-semibold">입력 내용</h3>
         <div className="text-base mt-1">{checkWord.OrgStr}</div>

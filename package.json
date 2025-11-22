@@ -1,7 +1,7 @@
 {
   "name": "matmal",
   "private": true,
-  "version": "0.0.2",
+  "version": "0.0.3",
   "productName": "matmal",
   "description": "간편한 한국어 맞춤법 검사 데스크탑 앱",
   "author": "zzzryt <jinjinstar3@gmail.com>",

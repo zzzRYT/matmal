@@ -12,7 +12,7 @@ function App() {
 
   return (
     <>
-      <div className="w-full flex flex-col bg-gray-50 h-screen">
+      <div className="w-full flex flex-col h-screen">
         <Header />
         <main className="flex-1 overflow-y-auto p-4">
           <Outlet />

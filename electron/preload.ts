@@ -7,6 +7,12 @@ declare global {
       generate: (opts: { sentence: string }) => Promise<SpellCheckerApiResponse>;
       hanSpell: (opts: { sentence: string; weakOpt?: number }) => Promise<SpellCheckerApiResponse>;
       onNavigate: (path: string) => Promise<void>;
+      openSetting: () => Promise<void>;
+      getAppVersion: () => Promise<string>;
+    };
+    theme: {
+      changeTheme: (mode: 'light' | 'dark' | 'system') => Promise<void>;
+      getTheme: () => Promise<'light' | 'dark' | 'system'>;
     };
   }
 }
@@ -35,4 +41,11 @@ contextBridge.exposeInMainWorld('api', {
   hanSpell: (opts: { sentence: string; weakOpt?: number }) =>
     ipcRenderer.invoke('hanSpell-check', opts),
   onNavigate: (path: string) => ipcRenderer.invoke('navigate', path),
+  openSetting: () => ipcRenderer.invoke('setting-open'),
+  getAppVersion: () => ipcRenderer.invoke('get-app-version'),
+});
+
+contextBridge.exposeInMainWorld('theme', {
+  changeTheme: (mode: 'light' | 'dark' | 'system') => ipcRenderer.invoke('theme-mode', mode),
+  getTheme: () => ipcRenderer.invoke('get-theme'),
 });

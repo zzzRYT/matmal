@@ -9,6 +9,7 @@ type State = {
 
 type Actions = {
   setSpell: (sentence: string) => void;
+  clearSpell: () => void;
   replaceOccurrence: (from: string, to: string, occurrence?: number) => void;
   undo: () => void;
 };
@@ -20,6 +21,7 @@ export const useSpellCheck = create<State & Actions>()(
       currentIndex: -1,
       spell: '',
       setSpell: (sentence: string) => set({ spell: sentence }),
+      clearSpell: () => set({ spell: '', history: [], currentIndex: -1 }),
       replaceOccurrence: (from: string, to: string, occurrence = 1) => {
         const source = get().spell ?? '';
         set({

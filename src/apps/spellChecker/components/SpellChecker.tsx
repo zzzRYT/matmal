@@ -46,7 +46,7 @@ function SpellChecker({ inputText }: SpellChecker) {
   return (
     <>
       <div className="flex w-full gap-4">
-        <section className="bg-white rounded shadow p-4 flex-1 flex flex-col h-120">
+        <section className="rounded shadow p-4 flex-1 flex flex-col h-120 border">
           <h2 className="text-lg font-medium mb-2">맞춤법 검사 입력</h2>
           <div className="flex-1 overflow-auto">
             {resultData ? (
@@ -61,7 +61,7 @@ function SpellChecker({ inputText }: SpellChecker) {
           </div>
         </section>
 
-        <section className="flex-1 bg-white rounded shadow p-4 flex flex-col h-120">
+        <section className="flex-1 rounded shadow p-4 flex flex-col h-120 border">
           <h2 className="text-lg font-medium mb-2">결과</h2>
           <div className="overflow-auto space-y-3 flex-1 min-h-0">
             {(() => {
