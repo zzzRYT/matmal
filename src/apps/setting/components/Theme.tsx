@@ -1,3 +1,5 @@
+import { useEffect } from 'react';
+
 import { ThemeSource, useThemeStore } from '../../../shared/stores/theme';
 
 import Button from '../../../shared/components/ui/Button';
@@ -5,7 +7,11 @@ import Button from '../../../shared/components/ui/Button';
 import SettingItem from './SettingItem';
 
 function ThemeSettings() {
-  const { themeSource, setThemeSource } = useThemeStore();
+  const { themeSource, setThemeSource, initializeTheme } = useThemeStore();
+
+  useEffect(() => {
+    initializeTheme();
+  }, [initializeTheme]);
 
   const handleSelectTheme = (theme: ThemeSource) => {
     window.theme.changeTheme(theme);

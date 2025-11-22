@@ -1,14 +1,12 @@
 import path from 'node:path';
+
 import { BrowserWindow, screen } from 'electron';
 import { FRAME } from './constants';
+import { PRELOAD_PATH, RENDERER_DIST, VITE_DEV_SERVER_URL } from '../paths';
 
 export let settingWin: BrowserWindow | null = null;
 
-export function createSettingWindow(
-  RENDERER_DIST: string,
-  VITE_DEV_SERVER_URL?: string,
-  preloadPath?: string
-) {
+export function createSettingWindow() {
   const { x, y } = screen.getCursorScreenPoint();
   settingWin = new BrowserWindow({
     x,
@@ -19,7 +17,7 @@ export function createSettingWindow(
     width: FRAME.QUICK.WIDTH,
     height: FRAME.QUICK.HEIGHT,
     webPreferences: {
-      preload: preloadPath ?? path.join(RENDERER_DIST, 'preload.mjs'),
+      preload: PRELOAD_PATH ?? path.join(RENDERER_DIST, 'preload.mjs'),
       contextIsolation: true,
     },
   });

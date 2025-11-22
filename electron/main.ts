@@ -96,7 +96,7 @@ app.whenReady().then(() => {
   });
 
   ipcMain.handle('setting-open', () => {
-    createSettingWindow(PRELOAD_PATH, VITE_DEV_SERVER_URL, PRELOAD_PATH);
+    createSettingWindow();
     settingWin?.on('ready-to-show', () => {
       settingWin?.show();
       settingWin?.focus();
@@ -118,8 +118,6 @@ app.on('will-quit', () => {
     ipcMain.removeHandler('generate');
     ipcMain.removeHandler('hanSpell-check');
     ipcMain.removeHandler('navigate');
-    ipcMain.removeHandler('set-theme');
-    ipcMain.removeHandler('get-theme');
   } catch (e) {
     console.error('electron quit error');
   }
