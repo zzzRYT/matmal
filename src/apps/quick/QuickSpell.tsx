@@ -52,18 +52,18 @@ function QuickSpell() {
   }
 
   return (
-    <div className="p-4 flex flex-col h-screen">
-      <div className="flex gap-4 [-webkit-app-region:drag]">
+    <div className="p-4 flex flex-col h-screen [-webkit-app-region:drag]">
+      <div className="flex gap-4">
         <span className="text-xs text-gray-500">텍스트 수: {spell.length}</span>
       </div>
-      <div className="flex-1 overflow-y-auto border border-gray-500 rounded-lg p-1 my-2">
+      <div className="flex-1 overflow-y-auto border border-gray-500 rounded-lg p-1 my-2 [-webkit-app-region:no-drag]">
         {resultData ? (
           <HighlightSpelling errorWordsData={resultData} originWords={spell} />
         ) : (
           <div>검사중...</div>
         )}
       </div>
-      <div className="flex justify-end gap-4 ">
+      <div className="flex justify-end gap-4 [-webkit-app-region:no-drag]">
         <Button onClick={handleNewCheck}>새 검사</Button>
         <Button onClick={handleDetailInfo}>상세 정보 확인</Button>
         <Button onClick={() => handleClipboard(spell)}>복사</Button>

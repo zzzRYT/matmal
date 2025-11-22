@@ -1,16 +1,17 @@
 import path from 'node:path';
 import fs from 'node:fs';
 import { fileURLToPath } from 'node:url';
-import { app, globalShortcut, ipcMain, BrowserWindow } from 'electron';
+import { app, globalShortcut, ipcMain, BrowserWindow, nativeTheme } from 'electron';
 import { createRequire } from 'module';
 import dotenv from 'dotenv';
 
-import { mainWin, createMainWindow as makeMainWindow } from './windows/mainWindow';
+import { mainWin, createMainWindow } from './windows/mainWindow';
 import { handleGeminiGenerate } from './controller/gemini';
 import { handleHanSpellCheck } from './controller/hanSpell';
 import { handleNavigate } from './controller/navigate';
 import { PRELOAD_PATH } from './paths';
 import { handleCopyText } from './controller/copy';
+import { createSettingWindow, settingWin } from './windows/settingWindow';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -65,7 +66,7 @@ app.on('window-all-closed', () => {
 
 app.on('activate', () => {
   if (BrowserWindow.getAllWindows().length === 0) {
-    makeMainWindow(RENDERER_DIST, VITE_DEV_SERVER_URL, PRELOAD_PATH);
+    createMainWindow(RENDERER_DIST, VITE_DEV_SERVER_URL, PRELOAD_PATH);
     mainWin?.on('ready-to-show', () => {
       mainWin?.show();
       mainWin?.focus();
@@ -87,7 +88,22 @@ app.whenReady().then(() => {
 
   ipcMain.handle('navigate', handleNavigate);
 
-  makeMainWindow(RENDERER_DIST, VITE_DEV_SERVER_URL, PRELOAD_PATH);
+  ipcMain.handle('get-theme', () => {
+    return nativeTheme.themeSource;
+  });
+  ipcMain.handle('theme-mode', (_event, mode: 'light' | 'dark' | 'system') => {
+    nativeTheme.themeSource = mode;
+  });
+
+  ipcMain.handle('setting-open', () => {
+    createSettingWindow(PRELOAD_PATH, VITE_DEV_SERVER_URL, PRELOAD_PATH);
+    settingWin?.on('ready-to-show', () => {
+      settingWin?.show();
+      settingWin?.focus();
+    });
+  });
+
+  createMainWindow(RENDERER_DIST, VITE_DEV_SERVER_URL, PRELOAD_PATH);
   mainWin?.on('ready-to-show', () => {
     mainWin?.show();
     mainWin?.focus();
@@ -102,6 +118,8 @@ app.on('will-quit', () => {
     ipcMain.removeHandler('generate');
     ipcMain.removeHandler('hanSpell-check');
     ipcMain.removeHandler('navigate');
+    ipcMain.removeHandler('set-theme');
+    ipcMain.removeHandler('get-theme');
   } catch (e) {
     console.error('electron quit error');
   }

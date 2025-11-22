@@ -16,7 +16,7 @@ function Instead({ instead, original }: InsteadProps) {
   }
 
   const highlightBox = clsx(
-    'inline-block px-2 py-1 bg-yellow-100 text-sm rounded hover:bg-yellow-200 cursor-pointer'
+    'inline-block px-2 py-1 bg-yellow-100 text-sm text-black rounded hover:bg-yellow-200 cursor-pointer'
   );
 
   if (!Array.isArray(instead.CandWord)) {

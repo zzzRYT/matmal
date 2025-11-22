@@ -21,5 +21,10 @@ electron.contextBridge.exposeInMainWorld("ipcRenderer", {
 electron.contextBridge.exposeInMainWorld("api", {
   generate: (opts) => electron.ipcRenderer.invoke("generate", opts),
   hanSpell: (opts) => electron.ipcRenderer.invoke("hanSpell-check", opts),
-  onNavigate: (path) => electron.ipcRenderer.invoke("navigate", path)
+  onNavigate: (path) => electron.ipcRenderer.invoke("navigate", path),
+  openSetting: () => electron.ipcRenderer.invoke("setting-open")
+});
+electron.contextBridge.exposeInMainWorld("theme", {
+  changeTheme: (mode) => electron.ipcRenderer.invoke("theme-mode", mode),
+  getTheme: () => electron.ipcRenderer.invoke("get-theme")
 });
