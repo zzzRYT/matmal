@@ -1,7 +1,7 @@
 {
   "name": "matmal",
   "private": true,
-  "version": "0.0.2",
+  "version": "0.0.3",
   "productName": "matmal",
   "description": "간편한 한국어 맞춤법 검사 데스크탑 앱",
   "author": "zzzryt <jinjinstar3@gmail.com>",
@@ -16,7 +16,8 @@
     "make": "electron-forge make",
     "publish": "electron-forge publish",
     "format": "prettier --write \"**/*.{ts,tsx,js,jsx,cjs,json,json5,css,md,html,yml,yaml}\"",
-    "format:check": "prettier --check ."
+    "format:check": "prettier --check .",
+    "version": "node ./script/updateVersion.js"
   },
   "config": {
     "forge": {
