@@ -10,6 +10,7 @@ import SpellCheckerPage from './page/spell-checker/index.tsx';
 import QuickSpellPage from './page/quick/index.tsx';
 import UserInputPage from './page/user-input/index.tsx';
 import ErrorFallback from './shared/components/ErrorFallback.tsx';
+import SettingPage from './page/setting/index.tsx';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
@@ -21,6 +22,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
             <Route path="result" element={<SpellCheckerPage />} />
           </Route>
           <Route path="/quick" element={<QuickSpellPage />}></Route>
+          <Route path="/setting" element={<SettingPage />}></Route>
         </Routes>
       </ErrorBoundary>
     </HashRouter>

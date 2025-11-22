@@ -1,6 +1,22 @@
 @import 'tailwindcss';
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 #root {
   height: 100vh;
   overflow: hidden;
+}
+
+@media (prefers-color-scheme: dark) {
+  body {
+    background: #1e2939;
+    color: white;
+  }
+}
+
+@media (prefers-color-scheme: light) {
+  body {
+    background: white;
+    color: black;
+  }
 }
