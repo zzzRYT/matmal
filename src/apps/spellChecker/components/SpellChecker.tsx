@@ -9,6 +9,7 @@ import { getCandWord, handleClipboard } from '../utils';
 
 import Button from '../../../shared/components/ui/Button';
 import { useSpellCheck } from '../../../shared/stores/spell';
+import { LoadingSpinner } from '../../../shared/components/ui/Loading';
 
 interface SpellChecker {
   inputText: string;
@@ -52,7 +53,7 @@ function SpellChecker({ inputText }: SpellChecker) {
             {resultData ? (
               <HighlightSpelling originWords={spell} errorWordsData={resultData} />
             ) : (
-              <div>검사중...</div>
+              <LoadingSpinner />
             )}
           </div>
           <div className="flex justify-end gap-4">
