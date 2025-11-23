@@ -37,7 +37,7 @@ export function createSettingWindow() {
     const target = `${VITE_DEV_SERVER_URL.replace(/\/$/, '')}/#${'/setting'}`;
     settingWin.loadURL(target);
   } else {
-    settingWin.loadFile('index.html');
+    settingWin.loadFile(path.join(RENDERER_DIST, 'index.html'));
     settingWin.webContents.once('did-finish-load', () => {
       settingWin?.webContents.send('navigate-to', '/setting');
     });

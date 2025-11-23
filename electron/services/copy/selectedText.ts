@@ -26,16 +26,12 @@ export async function getSelectedText(): Promise<string> {
   }
 
   return new Promise((resolve, reject) => {
-    const previousContent = clipboard.readText();
-
     exec(getCopyCommand(), (error) => {
       if (error) {
-        clipboard.writeText(previousContent);
         return reject(error);
       }
       setTimeout(() => {
         const selectedText = clipboard.readText();
-        clipboard.writeText(previousContent);
         resolve(selectedText);
       }, 150);
     });

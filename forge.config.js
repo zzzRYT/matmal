@@ -4,7 +4,7 @@ import { FuseV1Options, FuseVersion } from '@electron/fuses';
 export default {
   packagerConfig: {
     asar: true,
-    icons: './src/assets/matmal-icon',
+    icon: './src/assets/matmal-icon',
     executableName: 'matmal',
     name: 'MATMAL',
   },
@@ -12,7 +12,9 @@ export default {
   makers: [
     {
       name: '@electron-forge/maker-squirrel',
-      config: {},
+      config: {
+        setupIcon: './src/assets/matmal-icon.ico',
+      },
     },
     {
       name: '@electron-forge/maker-zip',
@@ -20,11 +22,21 @@ export default {
     },
     {
       name: '@electron-forge/maker-deb',
-      config: {},
+      config: {
+        icon: '/src/assets/matmal-icon.png',
+      },
+    },
+    {
+      name: '@electron-forge/maker-dmg',
+      config: {
+        icon: '/src/assets/matmal-icon.icns',
+      },
     },
     {
       name: '@electron-forge/maker-rpm',
-      config: {},
+      config: {
+        icon: '/src/assets/matmal-icon.png',
+      },
     },
   ],
   publishers: [
