@@ -22,7 +22,7 @@
     "forge": {
       "packagerConfig": {
         "asar": true,
-        "icons": "./public/matmal-icon.png",
+        "icon": "./public/matmal-icon",
         "name": "matmal",
         "packagedName": "matmal",
         "executableName": "matmal"
@@ -32,7 +32,7 @@
           "name": "@electron-forge/maker-squirrel",
           "config": {
             "options": {
-              "icon": "./src/assets/matmal-icon.ico",
+              "icon": "./public/matmal-icon.ico",
               "name": "matmal",
               "productName": "matmal"
             }
