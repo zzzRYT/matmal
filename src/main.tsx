@@ -9,8 +9,8 @@ import './index.css';
 import SpellCheckerPage from './page/spell-checker/index.tsx';
 import QuickSpellPage from './page/quick/index.tsx';
 import UserInputPage from './page/user-input/index.tsx';
-import ErrorFallback from './shared/components/ErrorFallback.tsx';
 import SettingPage from './page/setting/index.tsx';
+import ErrorFallback from './shared/components/ErrorFallback.tsx';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
