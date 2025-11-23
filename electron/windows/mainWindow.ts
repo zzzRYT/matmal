@@ -10,7 +10,7 @@ export function createMainWindow(
   preloadPath?: string
 ) {
   mainWin = new BrowserWindow({
-    icon: path.join(process.env.VITE_PUBLIC ?? RENDERER_DIST, 'electron-vite.svg'),
+    icon: path.join(process.env.VITE_PUBLIC ?? RENDERER_DIST, 'matmal-icon.png'),
     webPreferences: {
       preload: preloadPath ?? path.join(RENDERER_DIST, 'preload.mjs'),
     },
