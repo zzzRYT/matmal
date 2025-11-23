@@ -4,7 +4,7 @@ import { FuseV1Options, FuseVersion } from '@electron/fuses';
 export default {
   packagerConfig: {
     asar: true,
-    icon: './src/assets/matmal-icon',
+    icon: './src/assets/matmal-icon.ico',
     executableName: 'matmal',
     name: 'MATMAL',
   },
