@@ -6,13 +6,15 @@ function Footer() {
   return (
     <>
       <footer className="px-4 py-3 bg-white border-t flex items-center justify-between">
-        <div className="flex items-center gap-3">
+        <div className="flex items-center justify-between gap-3 w-full">
           <button
             className="text-sm text-gray-600 hover:underline"
             onClick={() => setShowHelp(true)}
           >
             도움말
           </button>
+          <span className="text-sm text-gray-600">AI 맞춤법 검사는 틀릴 수 있습니다.</span>
+          <div></div>
         </div>
       </footer>
 
@@ -22,10 +24,10 @@ function Footer() {
           onClick={() => setShowHelp(false)}
         >
           <div
-            className="bg-white rounded p-4 w-11/12 md:w-1/2"
+            className="bg-white dark:bg-black rounded p-4 w-11/12 md:w-1/2"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between text-black">
               <h3 className="text-lg font-medium">도움말</h3>
               <button onClick={() => setShowHelp(false)} className="p-1">
                 ✕
@@ -36,6 +38,10 @@ function Footer() {
               <li>
                 원하는 글자 드레그 후 [ctrl or Command + shift + d] 키를 눌러 quick window를 실행할
                 수 있습니다.
+              </li>
+              <li>
+                macOS에서 실행시 복사 기능이 제한될 수 있습니다. 제대로된 동작이 안될경우 [ctrl +
+                C]복사 기능을 누르고, 단축키를 눌러주세요
               </li>
               <li>에러가 발생한다면 앱을 껐다가 켜 보세요.</li>
             </ul>

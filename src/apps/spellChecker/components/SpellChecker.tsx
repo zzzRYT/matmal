@@ -69,7 +69,7 @@ function SpellChecker({ inputText }: SpellChecker) {
               if (!resultData) return <p className="text-gray-500">결과가 여기에 표시됩니다.</p>;
               const raw = resultData.PnuErrorWordList?.PnuErrorWord;
               if (raw.length === 0)
-                return <p className="text-gray-500">결과가 여기에 표시됩니다.</p>;
+                return <p className="text-gray-500">검사할 맞춤법이 존재하지 않습니다.</p>;
               return raw.map((word, idx) => {
                 const currentWord = getCandWord(word);
                 if (currentWord !== word.OrgStr) {
