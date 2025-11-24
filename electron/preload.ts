@@ -6,7 +6,7 @@ declare global {
     api: {
       generate: (opts: { sentence: string }) => Promise<SpellCheckerApiResponse>;
       hanSpell: (opts: { sentence: string; weakOpt?: number }) => Promise<SpellCheckerApiResponse>;
-      onNavigate: (path: string) => Promise<void>;
+      onNavigate: (path: string, payload?: string) => Promise<void>;
       openSetting: () => Promise<void>;
       getAppVersion: () => Promise<string>;
     };
@@ -40,7 +40,7 @@ contextBridge.exposeInMainWorld('api', {
   generate: (opts: { sentence: string }) => ipcRenderer.invoke('generate', opts),
   hanSpell: (opts: { sentence: string; weakOpt?: number }) =>
     ipcRenderer.invoke('hanSpell-check', opts),
-  onNavigate: (path: string) => ipcRenderer.invoke('navigate', path),
+  onNavigate: (path: string, payload?: string) => ipcRenderer.invoke('navigate', path, payload),
   openSetting: () => ipcRenderer.invoke('setting-open'),
   getAppVersion: () => ipcRenderer.invoke('get-app-version'),
 });
