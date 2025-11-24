@@ -3,7 +3,7 @@ import "node:fs";
 import "node:url";
 import "electron";
 import "module";
-import { M, R, V } from "./main-BKZVNWng.js";
+import { M, R, V } from "./main-CzLorSzc.js";
 export {
   M as MAIN_DIST,
   R as RENDERER_DIST,

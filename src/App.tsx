@@ -6,9 +6,19 @@ import { ToastContainer } from 'react-toastify';
 import { useSpellCheck } from './shared/stores/spell';
 
 function App() {
+  const { setSpell } = useSpellCheck();
+
   useEffect(() => {
-    useSpellCheck.getState().setSpell('');
-  }, []);
+    const handleSetSpell = (_event: unknown, text: string) => {
+      setSpell(text);
+    };
+
+    window.ipcRenderer.on('set-spell-from-quick-window', handleSetSpell);
+
+    return () => {
+      window.ipcRenderer.off('set-spell-from-quick-window', handleSetSpell);
+    };
+  }, [setSpell]);
 
   return (
     <>

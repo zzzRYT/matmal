@@ -21,7 +21,7 @@ electron.contextBridge.exposeInMainWorld("ipcRenderer", {
 electron.contextBridge.exposeInMainWorld("api", {
   generate: (opts) => electron.ipcRenderer.invoke("generate", opts),
   hanSpell: (opts) => electron.ipcRenderer.invoke("hanSpell-check", opts),
-  onNavigate: (path) => electron.ipcRenderer.invoke("navigate", path),
+  onNavigate: (path, payload) => electron.ipcRenderer.invoke("navigate", path, payload),
   openSetting: () => electron.ipcRenderer.invoke("setting-open"),
   getAppVersion: () => electron.ipcRenderer.invoke("get-app-version")
 });

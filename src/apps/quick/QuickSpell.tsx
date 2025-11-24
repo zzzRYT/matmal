@@ -1,5 +1,4 @@
 import { useEffect, useState, useCallback } from 'react';
-import { useStore } from 'zustand';
 
 import { SpellCheckerApiResponse } from '../../../electron/services/schema';
 
@@ -13,7 +12,7 @@ import Button from '../../shared/components/ui/Button';
 type Status = 'loading' | 'success' | 'error';
 
 function QuickSpell() {
-  const { spell, setSpell, clearSpell } = useStore(useSpellCheck);
+  const { spell, setSpell, clearSpell } = useSpellCheck();
   const [resultData, setResultData] = useState<SpellCheckerApiResponse | null>(null);
   const [status, setStatus] = useState<Status>('loading');
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -72,7 +71,7 @@ function QuickSpell() {
   };
 
   const handleDetailInfo = () => {
-    window.api.onNavigate('/result');
+    window.api.onNavigate('/result', spell);
   };
 
   const renderContent = () => {

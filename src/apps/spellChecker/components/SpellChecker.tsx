@@ -1,5 +1,4 @@
-import { useEffect, useState, useRef, useCallback } from 'react';
-import { useStore } from 'zustand';
+import { useEffect, useState, useCallback } from 'react';
 
 import { SpellCheckerApiResponse } from '../../../../electron/services/schema';
 
@@ -11,34 +10,27 @@ import Button from '../../../shared/components/ui/Button';
 import { useSpellCheck } from '../../../shared/stores/spell';
 import { LoadingSpinner } from '../../../shared/components/ui/Loading';
 
-interface SpellChecker {
-  inputText: string;
-}
-
-function SpellChecker({ inputText }: SpellChecker) {
-  const { spell, setSpell, undo } = useStore(useSpellCheck);
+function SpellChecker() {
+  const { spell, undo } = useSpellCheck();
   const [resultData, setResultData] = useState<SpellCheckerApiResponse | null>(null);
   const [error, setError] = useState<Error | null>(null);
-  const didMountRef = useRef(false);
 
-  const callGenerateSpell = useCallback(
-    async (sentence?: string) => {
-      try {
-        const res = await window.api.generate({ sentence: sentence ?? spell });
-        setResultData(res as SpellCheckerApiResponse);
-        setSpell(inputText);
-      } catch (err) {
-        setError(err as Error);
-      }
-    },
-    [spell, inputText, setSpell]
-  );
+  console.log('spell:', spell);
+
+  const callGenerateSpell = useCallback(async () => {
+    setResultData(null);
+    setError(null);
+    try {
+      const res = await window.api.generate({ sentence: spell });
+      setResultData(res as SpellCheckerApiResponse);
+    } catch (err) {
+      setError(err as Error);
+    }
+  }, [spell]);
 
   useEffect(() => {
-    if (didMountRef.current) return;
-    didMountRef.current = true;
     callGenerateSpell();
-  }, [callGenerateSpell]);
+  }, [spell, callGenerateSpell]);
 
   if (error) {
     throw error;
